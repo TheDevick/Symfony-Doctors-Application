@@ -72,10 +72,10 @@ class Doctor implements JsonSerializable
         $subscription = $this->getSubscription() ?? null;
 
         return [
-            "Id" => $id,
-            "Name" => $name,
-            "Area" => $area,
-            "Subscription" => $subscription,
+            'Id' => $id,
+            'Name' => $name,
+            'Area' => $area,
+            'Subscription' => $subscription,
         ];
     }
 

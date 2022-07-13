@@ -12,9 +12,9 @@ class SpecialtyController extends AbstractController
     public function index(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/specialties',
-            "Name" => 'Specialties.Index',
-            "Methods" => 'GET'
+            'Path' => '/specialties',
+            'Name' => 'Specialties.Index',
+            'Methods' => 'GET',
         ]);
     }
 
@@ -22,9 +22,9 @@ class SpecialtyController extends AbstractController
     public function store(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/specialties',
-            "Name" => 'Specialties.Store',
-            "Methods" => 'POST'
+            'Path' => '/specialties',
+            'Name' => 'Specialties.Store',
+            'Methods' => 'POST',
         ]);
     }
 
@@ -32,9 +32,9 @@ class SpecialtyController extends AbstractController
     public function show(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/specialties/{id}',
-            "Name" => 'Specialties.Show',
-            "Methods" => 'GET'
+            'Path' => '/specialties/{id}',
+            'Name' => 'Specialties.Show',
+            'Methods' => 'GET',
         ]);
     }
 
@@ -42,9 +42,9 @@ class SpecialtyController extends AbstractController
     public function update(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/specialties/{id}',
-            "Name" => 'Specialties.Update',
-            "Methods" => 'PUT'
+            'Path' => '/specialties/{id}',
+            'Name' => 'Specialties.Update',
+            'Methods' => 'PUT',
         ]);
     }
 
@@ -52,9 +52,9 @@ class SpecialtyController extends AbstractController
     public function destroy(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/specialties/{id}',
-            "Name" => 'Specialties.Destroy',
-            "Methods" => 'DELETE'
+            'Path' => '/specialties/{id}',
+            'Name' => 'Specialties.Destroy',
+            'Methods' => 'DELETE',
         ]);
     }
 }

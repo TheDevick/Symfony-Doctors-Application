@@ -12,9 +12,9 @@ class DoctorController extends AbstractController
     public function index(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/doctors',
-            "Name" => 'Doctors.Index',
-            "Methods" => 'GET'
+            'Path' => '/doctors',
+            'Name' => 'Doctors.Index',
+            'Methods' => 'GET',
         ]);
     }
 
@@ -22,9 +22,9 @@ class DoctorController extends AbstractController
     public function store(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/doctors',
-            "Name" => 'Doctors.Store',
-            "Methods" => 'POST'
+            'Path' => '/doctors',
+            'Name' => 'Doctors.Store',
+            'Methods' => 'POST',
         ]);
     }
 
@@ -32,9 +32,9 @@ class DoctorController extends AbstractController
     public function show(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/doctors/{id}',
-            "Name" => 'Doctors.Show',
-            "Methods" => 'GET'
+            'Path' => '/doctors/{id}',
+            'Name' => 'Doctors.Show',
+            'Methods' => 'GET',
         ]);
     }
 
@@ -42,9 +42,9 @@ class DoctorController extends AbstractController
     public function update(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/doctors/{id}',
-            "Name" => 'Doctors.Update',
-            "Methods" => 'PUT'
+            'Path' => '/doctors/{id}',
+            'Name' => 'Doctors.Update',
+            'Methods' => 'PUT',
         ]);
     }
 
@@ -52,9 +52,9 @@ class DoctorController extends AbstractController
     public function destroy(): JsonResponse
     {
         return new JsonResponse([
-            "Path" => '/doctors/{id}',
-            "Name" => 'Doctors.Destroy',
-            "Methods" => 'DELETE'
+            'Path' => '/doctors/{id}',
+            'Name' => 'Doctors.Destroy',
+            'Methods' => 'DELETE',
         ]);
     }
 }
