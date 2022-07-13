@@ -19,11 +19,9 @@ class DoctorController extends AbstractController
     #[Route(path: '/doctors', name: 'doctors.index', methods: 'GET')]
     public function index(): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/doctors',
-            'Name' => 'Doctors.Index',
-            'Methods' => 'GET',
-        ]);
+        $doctors = $this->doctorRepository->findAll();
+
+        return new JsonResponse($doctors);
     }
 
     #[Route(path: '/doctors', name: 'doctors.store', methods: 'POST')]
