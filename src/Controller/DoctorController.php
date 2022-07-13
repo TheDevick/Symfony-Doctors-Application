@@ -21,7 +21,7 @@ class DoctorController extends AbstractController
     {
         return new JsonResponse(
             ['Error' => 'No Resources Found'],
-            Response::HTTP_NO_CONTENT
+            Response::HTTP_NOT_FOUND
         );
     }
 
