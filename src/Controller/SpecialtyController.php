@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SpecialtyController extends AbstractController
 {
-    #[Route(path:'/specialties', name:'specialties.index', methods:'GET')]
+    #[Route(path: '/specialties', name: 'specialties.index', methods: 'GET')]
     public function index(): JsonResponse
     {
         return new JsonResponse([
@@ -18,7 +18,7 @@ class SpecialtyController extends AbstractController
         ]);
     }
 
-    #[Route(path:'/specialties', name:'specialties.store', methods:'POST')]
+    #[Route(path: '/specialties', name: 'specialties.store', methods: 'POST')]
     public function store(): JsonResponse
     {
         return new JsonResponse([
@@ -28,7 +28,7 @@ class SpecialtyController extends AbstractController
         ]);
     }
 
-    #[Route(path:'/specialties/{id}', name:'specialties.show', methods:'GET')]
+    #[Route(path: '/specialties/{id}', name: 'specialties.show', methods: 'GET')]
     public function show(): JsonResponse
     {
         return new JsonResponse([
@@ -38,7 +38,7 @@ class SpecialtyController extends AbstractController
         ]);
     }
 
-    #[Route(path:'/specialties/{id}', name:'specialties.update', methods:'PUT')]
+    #[Route(path: '/specialties/{id}', name: 'specialties.update', methods: 'PUT')]
     public function update(): JsonResponse
     {
         return new JsonResponse([
@@ -48,7 +48,7 @@ class SpecialtyController extends AbstractController
         ]);
     }
 
-    #[Route(path:'/specialties/{id}', name:'specialties.destroy', methods:'DELETE')]
+    #[Route(path: '/specialties/{id}', name: 'specialties.destroy', methods: 'DELETE')]
     public function destroy(): JsonResponse
     {
         return new JsonResponse([
@@ -57,5 +57,4 @@ class SpecialtyController extends AbstractController
             "Methods" => 'DELETE'
         ]);
     }
-
 }
