@@ -61,13 +61,23 @@ class DoctorController extends AbstractController
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.update', methods: 'PUT')]
-    public function update(): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/doctors/{id}',
-            'Name' => 'Doctors.Update',
-            'Methods' => 'PUT',
-        ]);
+        $doctor = $this->doctorRepository->find($id);
+
+        if (is_null($doctor)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        $data = $request->toArray();
+
+        $doctor->setName($data['Name']);
+        $doctor->setArea($data['Area']);
+        $doctor->setSubscription($data['Subscription']);
+
+        $this->doctorRepository->flush();
+
+        return new JsonResponse($doctor);
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.destroy', methods: 'DELETE')]

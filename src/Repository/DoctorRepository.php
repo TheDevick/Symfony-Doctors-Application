@@ -39,6 +39,11 @@ class DoctorRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
 //    /**
 //     * @return Doctor[] Returns an array of Doctor objects
 //     */
