@@ -2,12 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Doctor;
+use App\Repository\DoctorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DoctorController extends AbstractController
 {
+    public function __construct(
+        private DoctorRepository $doctorRepository
+    ) {
+    }
+
     #[Route(path: '/doctors', name: 'doctors.index', methods: 'GET')]
     public function index(): JsonResponse
     {
@@ -19,13 +27,18 @@ class DoctorController extends AbstractController
     }
 
     #[Route(path: '/doctors', name: 'doctors.store', methods: 'POST')]
-    public function store(): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/doctors',
-            'Name' => 'Doctors.Store',
-            'Methods' => 'POST',
-        ]);
+        $data = $request->toArray();
+
+        $doctor = new Doctor();
+        $doctor->setName($data['Name']);
+        $doctor->setArea($data['Area']);
+        $doctor->setSubscription($data['Subscription']);
+
+        $this->doctorRepository->add($doctor, true);
+
+        return new JsonResponse($doctor);
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.show', methods: 'GET')]
