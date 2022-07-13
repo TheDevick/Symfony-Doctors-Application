@@ -7,6 +7,7 @@ use App\Repository\DoctorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DoctorController extends AbstractController
@@ -14,6 +15,14 @@ class DoctorController extends AbstractController
     public function __construct(
         private DoctorRepository $doctorRepository
     ) {
+    }
+
+    private function jsonResponseNotFound()
+    {
+        return new JsonResponse(
+            ['Error' => 'No Resources Found'],
+            Response::HTTP_NO_CONTENT
+        );
     }
 
     #[Route(path: '/doctors', name: 'doctors.index', methods: 'GET')]
@@ -40,13 +49,15 @@ class DoctorController extends AbstractController
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.show', methods: 'GET')]
-    public function show(): JsonResponse
+    public function show(int $id): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/doctors/{id}',
-            'Name' => 'Doctors.Show',
-            'Methods' => 'GET',
-        ]);
+        $doctor = $this->doctorRepository->find($id);
+
+        if (is_null($doctor)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        return new JsonResponse($doctor);
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.update', methods: 'PUT')]
