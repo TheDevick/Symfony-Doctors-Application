@@ -13,10 +13,10 @@ class DoctorFactory implements Factory
     {
     }
 
-    public array $doctorRequiredElements = ['Name', 'Area', 'Subscription', 'Specialty'];
-    public array $doctorAllElements = ['Name', 'Area', 'Subscription', 'Specialty'];
+    public array $doctorRequiredElements = ['Name', 'Area', 'Subscription', 'SpecialtyId'];
+    public array $doctorAllElements = ['Name', 'Area', 'Subscription', 'SpecialtyId'];
 
-    public function checkArrayToCreateDoctor(array $array): array|bool
+    public function checkArrayToCreateDoctor(array $array): object|bool
     {
         $collection = new ArrayCollection($array);
 
@@ -24,17 +24,26 @@ class DoctorFactory implements Factory
             $arrayContains = $collection->containsKey($value);
 
             if (!$arrayContains) {
-                return [
-                    'Error' => 'This Resource is Missing Parameters',
-                    'Status Code' => Response::HTTP_UNPROCESSABLE_ENTITY,
+                $message = ['Error' => 'This Resource is Missing Parameters'];
+                $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+
+                $error = (object) [
+                    'message' => $message,
+                    'statusCode' => $statusCode,
+                ];
+
+                return (object) [
+                    'error' => $error,
                 ];
             }
         }
 
         if (!$this->checkSpecialtyExists($array)) {
-            return [
-                'Error' => 'Specialty Resorce Not Found',
-                'Status Code' => Response::HTTP_NOT_FOUND,
+            return (object) [
+                'error' => [
+                    'message' => 'Specialty Resorce Not Found',
+                    'statusCode' => Response::HTTP_NOT_FOUND,
+                ],
             ];
         }
 
@@ -43,7 +52,7 @@ class DoctorFactory implements Factory
 
     private function checkSpecialtyExists(array $data): bool
     {
-        $specialtyId = $data['Specialty'];
+        $specialtyId = $data['SpecialtyId'];
 
         $specialty = $this->specialtyRepository->find($specialtyId);
 
@@ -78,7 +87,7 @@ class DoctorFactory implements Factory
             $arrayContains = $collection->containsKey($element);
 
             if ($arrayContains) {
-                if ('Specialty' == $element) {
+                if ('SpecialtyId' == $element) {
                     $specialtyId = $collection->get($element);
 
                     $this->setSpecialty($doctor, $specialtyId);
