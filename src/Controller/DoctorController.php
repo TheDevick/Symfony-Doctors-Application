@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Doctor;
+use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,16 +13,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class DoctorController extends AbstractController
 {
     public function __construct(
-        private DoctorRepository $doctorRepository
+        private DoctorRepository $doctorRepository,
+        private DoctorFactory $doctorFactory
     ) {
     }
 
-    private function jsonResponseNotFound()
+    private function jsonResponseNotFound(): JsonResponse
     {
-        return new JsonResponse(
-            ['Error' => 'No Resources Found'],
-            Response::HTTP_NOT_FOUND
-        );
+        $error = ['Error' => 'No Resources Found'];
+        $statusCode = Response::HTTP_NOT_FOUND;
+
+        return new JsonResponse($error, $statusCode);
+    }
+
+    private function jsonResponseMissingParameters(): JsonResponse
+    {
+        $error = ['Error' => 'This Resource is Missing Parameters'];
+        $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+
+        return new JsonResponse($error, $statusCode);
     }
 
     #[Route(path: '/doctors', name: 'doctors.index', methods: 'GET')]
@@ -38,10 +47,13 @@ class DoctorController extends AbstractController
     {
         $data = $request->toArray();
 
-        $doctor = new Doctor();
-        $doctor->setName($data['Name']);
-        $doctor->setArea($data['Area']);
-        $doctor->setSubscription($data['Subscription']);
+        $checks = $this->doctorFactory->checkArrayToCreateDoctor($data);
+
+        if (!$checks) {
+            return $this->jsonResponseMissingParameters();
+        }
+
+        $doctor = $this->doctorFactory->createDoctor($data);
 
         $this->doctorRepository->add($doctor, true);
 
@@ -71,9 +83,7 @@ class DoctorController extends AbstractController
 
         $data = $request->toArray();
 
-        $doctor->setName($data['Name']);
-        $doctor->setArea($data['Area']);
-        $doctor->setSubscription($data['Subscription']);
+        $this->doctorFactory->updateDoctor($doctor, $data);
 
         $this->doctorRepository->flush();
 
