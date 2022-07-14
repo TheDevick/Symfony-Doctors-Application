@@ -23,6 +23,10 @@ class Doctor implements JsonSerializable
     #[ORM\Column(type: 'string', length: 50)]
     private $name;
 
+    #[ORM\ManyToOne(targetEntity: Specialty::class, inversedBy: 'doctors')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $specialty;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -43,6 +47,11 @@ class Doctor implements JsonSerializable
         return $this->name;
     }
 
+    public function getSpecialty(): ?Specialty
+    {
+        return $this->specialty;
+    }
+
     public function setSubscription(int $subscription): self
     {
         $this->subscription = $subscription;
@@ -60,6 +69,13 @@ class Doctor implements JsonSerializable
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function setSpecialty(?Specialty $specialty): self
+    {
+        $this->specialty = $specialty;
 
         return $this;
     }
