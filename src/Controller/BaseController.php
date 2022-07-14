@@ -42,7 +42,7 @@ abstract class BaseController extends AbstractController
 
         $this->repository->add($entity, true);
 
-        return new JsonResponse($entity);
+        return new JsonResponse($entity, Response::HTTP_CREATED);
     }
 
     public function show(int $id): JsonResponse
