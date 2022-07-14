@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Factory\SpecialtyFactory;
+use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,6 +15,7 @@ class SpecialtyController extends AbstractController
 {
     public function __construct(
         private SpecialtyRepository $specialtyRepository,
+        private DoctorRepository $doctorRepository,
         private SpecialtyFactory $specialtyFactory
     ) {
     }
@@ -102,5 +104,17 @@ class SpecialtyController extends AbstractController
         $this->specialtyRepository->remove($specialty, true);
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route(path: '/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]
+    public function showDoctors(int $id)
+    {
+        $doctors = $this->doctorRepository->findBy(['specialty' => $id]);
+
+        if (empty($doctors)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        return new JsonResponse($doctors);
     }
 }
