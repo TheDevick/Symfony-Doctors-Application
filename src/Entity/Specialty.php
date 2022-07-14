@@ -6,9 +6,10 @@ use App\Repository\SpecialtyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: SpecialtyRepository::class)]
-class Specialty
+class Specialty implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -83,5 +84,25 @@ class Specialty
         }
 
         return $this;
+    }
+
+    public function view(): array
+    {
+        $id = $this->getId() ?? null;
+        $title = $this->getTitle() ?? null;
+        $description = $this->getDescription() ?? null;
+        $doctors = $this->getDoctors() ?? null;
+
+        return [
+            'Id' => $id,
+            'Title' => $title,
+            'Description' => $description,
+            'Doctors' => $doctors,
+        ];
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->view();
     }
 }
