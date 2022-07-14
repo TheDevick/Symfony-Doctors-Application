@@ -61,13 +61,15 @@ class SpecialtyController extends AbstractController
     }
 
     #[Route(path: '/specialties/{id}', name: 'specialties.show', methods: 'GET')]
-    public function show(): JsonResponse
+    public function show(int $id): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/specialties/{id}',
-            'Name' => 'Specialties.Show',
-            'Methods' => 'GET',
-        ]);
+        $specialty = $this->specialtyRepository->find($id);
+
+        if (is_null($specialty)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        return new JsonResponse($specialty);
     }
 
     #[Route(path: '/specialties/{id}', name: 'specialties.update', methods: 'PUT')]
