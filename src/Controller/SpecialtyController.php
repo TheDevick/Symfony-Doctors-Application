@@ -71,13 +71,21 @@ class SpecialtyController extends AbstractController
     }
 
     #[Route(path: '/specialties/{id}', name: 'specialties.update', methods: 'PUT')]
-    public function update(): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/specialties/{id}',
-            'Name' => 'Specialties.Update',
-            'Methods' => 'PUT',
-        ]);
+        $specialty = $this->specialtyRepository->find($id);
+
+        if (is_null($specialty)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        $data = $request->toArray();
+
+        $this->specialtyFactory->updateSpecialty($specialty, $data);
+
+        $this->specialtyRepository->flush();
+
+        return new JsonResponse($specialty);
     }
 
     #[Route(path: '/specialties/{id}', name: 'specialties.destroy', methods: 'DELETE')]

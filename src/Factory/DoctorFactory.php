@@ -78,11 +78,11 @@ class DoctorFactory
             $arrayContains = $collection->containsKey($element);
 
             if ($arrayContains) {
-                if ($element == 'SpecialtyId') {
+                if ('SpecialtyId' == $element) {
                     $specialtyId = $collection->get($element);
-    
+
                     $this->setSpecialty($doctor, $specialtyId);
-    
+
                     continue;
                 }
 
