@@ -20,9 +20,9 @@ class SpecialtyController extends BaseController
         parent::__construct($specialtyRepository, $specialtyFactory);
     }
 
-    private function jsonResponseNotFound(): JsonResponse
+    protected function jsonResponseNotFound(): JsonResponse
     {
-        $error = ['Error' => 'No Resources Found'];
+        $error = ['Error' => 'Specialty Not Found'];
         $statusCode = Response::HTTP_NOT_FOUND;
 
         return new JsonResponse($error, $statusCode);

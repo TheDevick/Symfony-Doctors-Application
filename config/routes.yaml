@@ -12,6 +12,11 @@ doctors.store:
     controller: App\Controller\DoctorController::store
     methods: POST
 
+doctors.show:
+    path: /doctors/{id}
+    controller: App\Controller\DoctorController::show
+    methods: GET
+
 
 specialties.index:
     path: /specialties
@@ -22,3 +27,8 @@ specialties.store:
     path: /specialties
     controller: App\Controller\SpecialtyController::store
     methods: POST
+
+specialties.show:
+    path: /specialties/{id}
+    controller: App\Controller\SpecialtyController::show
+    methods: GET

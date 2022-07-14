@@ -18,9 +18,9 @@ class DoctorController extends BaseController
         parent::__construct($doctorRepository, $doctorFactory);
     }
 
-    private function jsonResponseNotFound(): JsonResponse
+    protected function jsonResponseNotFound(): JsonResponse
     {
-        $error = ['Error' => 'No Resources Found'];
+        $error = ['Error' => 'Doctor Not Found'];
         $statusCode = Response::HTTP_NOT_FOUND;
 
         return new JsonResponse($error, $statusCode);
