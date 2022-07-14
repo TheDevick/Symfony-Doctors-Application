@@ -122,8 +122,12 @@ class DoctorFactory implements Factory
         return $doctor;
     }
 
-    public function updateEntity(Entity $entity, array $data): Entity
+    public function updateEntity(Entity $entity, array $data): Entity|false
     {
+        if (!$this->checkSpecialtyExists($data)) {
+            return false;
+        }
+
         $this->doctorSetValues($entity, $data);
 
         return $entity;

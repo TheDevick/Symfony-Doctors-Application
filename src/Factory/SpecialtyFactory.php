@@ -74,7 +74,7 @@ class SpecialtyFactory implements Factory
         return $specialty;
     }
 
-    public function updateEntity(Entity $entity, array $data): Entity
+    public function updateEntity(Entity $entity, array $data): Entity|false
     {
         $this->specialtySetValues($entity, $data);
 
