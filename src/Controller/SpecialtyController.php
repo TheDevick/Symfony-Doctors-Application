@@ -46,18 +46,6 @@ class SpecialtyController extends BaseController
         return true;
     }
 
-    #[Route(path: '/specialties/{id}', name: 'specialties.show', methods: 'GET')]
-    public function show(int $id): JsonResponse
-    {
-        $specialty = $this->specialtyRepository->find($id);
-
-        if (is_null($specialty)) {
-            return $this->jsonResponseNotFound();
-        }
-
-        return new JsonResponse($specialty);
-    }
-
     #[Route(path: '/specialties/{id}', name: 'specialties.update', methods: 'PUT')]
     public function update(Request $request, int $id): JsonResponse
     {

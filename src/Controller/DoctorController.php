@@ -44,18 +44,6 @@ class DoctorController extends BaseController
         return true;
     }
 
-    #[Route(path: '/doctors/{id}', name: 'doctors.show', methods: 'GET')]
-    public function show(int $id): JsonResponse
-    {
-        $doctor = $this->doctorRepository->find($id);
-
-        if (is_null($doctor)) {
-            return $this->jsonResponseNotFound();
-        }
-
-        return new JsonResponse($doctor);
-    }
-
     #[Route(path: '/doctors/{id}', name: 'doctors.update', methods: 'PUT')]
     public function update(Request $request, int $id): JsonResponse
     {
