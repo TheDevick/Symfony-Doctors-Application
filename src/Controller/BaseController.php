@@ -66,8 +66,6 @@ abstract class BaseController extends AbstractController
 
         $entities = $this->repository->findBy([], orderBy: $sort);
 
-        $entities = $this->repository->findAll();
-
         return new JsonResponse($entities);
     }
 
