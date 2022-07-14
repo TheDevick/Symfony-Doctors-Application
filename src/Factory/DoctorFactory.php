@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Doctor;
+use App\Entity\Entity;
 use App\Repository\SpecialtyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
@@ -121,10 +122,10 @@ class DoctorFactory implements Factory
         return $doctor;
     }
 
-    public function updateDoctor(Doctor $doctor, array $data): Doctor
+    public function updateEntity(Entity $entity, array $data): Entity
     {
-        $this->doctorSetValues($doctor, $data);
+        $this->doctorSetValues($entity, $data);
 
-        return $doctor;
+        return $entity;
     }
 }

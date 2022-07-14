@@ -2,6 +2,7 @@
 
 namespace App\Factory;
 
+use App\Entity\Entity;
 use App\Entity\Specialty;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,10 +74,10 @@ class SpecialtyFactory implements Factory
         return $specialty;
     }
 
-    public function updateSpecialty(Specialty $specialty, array $data): Specialty
+    public function updateEntity(Entity $entity, array $data): Entity
     {
-        $this->specialtySetValues($specialty, $data);
+        $this->specialtySetValues($entity, $data);
 
-        return $specialty;
+        return $entity;
     }
 }
