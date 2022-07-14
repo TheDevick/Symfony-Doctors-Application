@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class DoctorController extends BaseController
 {

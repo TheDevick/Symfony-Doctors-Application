@@ -18,6 +18,7 @@ abstract class BaseController extends AbstractController
     }
 
     abstract protected function checkStore(array $data): bool|JsonResponse;
+
     abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
 
     public function index(): JsonResponse
@@ -54,7 +55,7 @@ abstract class BaseController extends AbstractController
 
         return new JsonResponse($entity);
     }
-    
+
     public function update(Request $request, int $id): JsonResponse
     {
         $entityFounded = $this->repository->find($id);
@@ -67,7 +68,7 @@ abstract class BaseController extends AbstractController
 
         $entityUpdated = $this->factory->updateEntity($entityFounded, $data);
 
-        if ($entityUpdated == false) {
+        if (false == $entityUpdated) {
             return $this->jsonResponseNotFound(false);
         }
 
