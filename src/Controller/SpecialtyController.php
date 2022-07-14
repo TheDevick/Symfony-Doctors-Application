@@ -5,19 +5,19 @@ namespace App\Controller;
 use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SpecialtyController extends AbstractController
+class SpecialtyController extends BaseController
 {
     public function __construct(
         private SpecialtyRepository $specialtyRepository,
         private DoctorRepository $doctorRepository,
         private SpecialtyFactory $specialtyFactory
     ) {
+        parent::__construct($specialtyRepository, $specialtyFactory);
     }
 
     private function jsonResponseNotFound(): JsonResponse

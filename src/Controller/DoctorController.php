@@ -4,18 +4,18 @@ namespace App\Controller;
 
 use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DoctorController extends AbstractController
+class DoctorController extends BaseController
 {
     public function __construct(
         private DoctorRepository $doctorRepository,
         private DoctorFactory $doctorFactory
     ) {
+        parent::__construct($doctorRepository, $doctorFactory);
     }
 
     private function jsonResponseNotFound(): JsonResponse
