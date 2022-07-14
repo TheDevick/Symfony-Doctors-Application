@@ -1,3 +1,14 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+doctors.index:
+    path: /doctors
+    controller: App\Controller\DoctorController::index
+    methods: GET
+
+
+specialties.index:
+    path: /specialties
+    controller: App\Controller\SpecialtyController::index
+    methods: GET

@@ -36,14 +36,6 @@ class SpecialtyController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    #[Route(path: '/specialties', name: 'specialties.index', methods: 'GET')]
-    public function index(): JsonResponse
-    {
-        $specialties = $this->specialtyRepository->findAll();
-
-        return new JsonResponse($specialties);
-    }
-
     #[Route(path: '/specialties', name: 'specialties.store', methods: 'POST')]
     public function store(Request $request): JsonResponse
     {

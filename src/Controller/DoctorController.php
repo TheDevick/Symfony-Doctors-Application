@@ -34,14 +34,6 @@ class DoctorController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    #[Route(path: '/doctors', name: 'doctors.index', methods: 'GET')]
-    public function index(): JsonResponse
-    {
-        $doctors = $this->doctorRepository->findAll();
-
-        return new JsonResponse($doctors);
-    }
-
     #[Route(path: '/doctors', name: 'doctors.store', methods: 'POST')]
     public function store(Request $request): JsonResponse
     {
