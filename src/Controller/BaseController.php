@@ -18,11 +18,54 @@ abstract class BaseController extends AbstractController
     }
 
     abstract protected function checkStore(array $data): bool|JsonResponse;
-
     abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
 
-    public function index(): JsonResponse
+    protected function getParameterInBody(Request $request, string $parameter, $default = null)
     {
+        if ($request->getContent() == null) {
+            return false;
+        }
+
+        $allParameters = $request->toArray();
+
+        if (!array_key_exists($parameter, $allParameters)) {
+            return $default;
+        }
+
+        $value = $allParameters[$parameter];
+
+        return $value;
+    }
+
+    protected function arrayKeysToLowerCase(array $array)
+    {
+        return array_change_key_case($array, CASE_LOWER);
+    }
+
+    protected function sortRequestFilter(Request $request): array
+    {
+        $defaultSortValue = ['id' => 'ASC'];
+
+        $sortBody = $this->getParameterInBody($request, 'Sort', $defaultSortValue);
+        $sortBodyType = gettype($sortBody);
+
+        if ($sortBodyType == 'array') {
+            $sort = $this->arrayKeysToLowerCase($sortBody);
+        }
+
+        if ($sortBodyType != 'array' && $sortBodyType != 'string') {
+            $sort = $defaultSortValue;
+        }
+
+        return $sort;
+    }
+
+    public function index(Request $request): JsonResponse
+    {
+        $sort = $this->sortRequestFilter($request);
+
+        $entities = $this->repository->findBy([], orderBy: $sort);
+
         $entities = $this->repository->findAll();
 
         return new JsonResponse($entities);
