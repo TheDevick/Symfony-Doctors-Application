@@ -86,7 +86,7 @@ class Doctor implements JsonSerializable
         $name = $this->getName() ?? null;
         $area = $this->getArea() ?? null;
         $subscription = $this->getSubscription() ?? null;
-        $specialtyId = $this->getSpecialty() ?? null;
+        $specialtyId = $this->getSpecialty()->getId() ?? null;
 
         return [
             'Id' => $id,

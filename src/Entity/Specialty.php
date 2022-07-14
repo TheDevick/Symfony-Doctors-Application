@@ -91,13 +91,11 @@ class Specialty implements JsonSerializable
         $id = $this->getId() ?? null;
         $title = $this->getTitle() ?? null;
         $description = $this->getDescription() ?? null;
-        $doctors = $this->getDoctors() ?? null;
 
         return [
             'Id' => $id,
             'Title' => $title,
             'Description' => $description,
-            'Doctors' => $doctors,
         ];
     }
 
