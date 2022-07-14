@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Entity;
 use App\Factory\Factory;
 use App\Repository\Repository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,9 +20,11 @@ abstract class BaseController extends AbstractController
 
     abstract protected function getEntityElements(): array;
 
-    abstract protected function checkStore(array $data): bool|JsonResponse;
+    abstract protected function checkStore(Request $request): bool|JsonResponse;
 
     abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
+
+    abstract protected function createEntityObject(Request $request): Entity;
 
     protected function getParameterInBody(Request $request, string $parameter, $default = null)
     {
@@ -102,15 +105,13 @@ abstract class BaseController extends AbstractController
 
     public function store(Request $request): JsonResponse
     {
-        $data = $request->toArray();
-
-        $check = $this->checkStore($data);
+        $check = $this->checkStore($request);
 
         if (is_object($check)) {
             return $check;
         }
 
-        $entity = $this->factory->createEntity($data);
+        $entity = $this->createEntityObject($request);
 
         $this->repository->add($entity, true);
 
