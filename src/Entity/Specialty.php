@@ -11,6 +11,10 @@ use JsonSerializable;
 #[ORM\Entity(repositoryClass: SpecialtyRepository::class)]
 class Specialty implements JsonSerializable, Entity
 {
+    public const ELEMENTS_TO_CREATE_ENTITY = [
+        'title',
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
