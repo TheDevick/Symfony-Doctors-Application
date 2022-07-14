@@ -17,7 +17,7 @@ abstract class BaseController extends AbstractController
     }
 
     abstract protected function checkStore(array $data): bool|JsonResponse;
-    abstract protected function jsonResponseNotFound(): JsonResponse;
+    abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
 
     public function index(): JsonResponse
     {
@@ -52,5 +52,24 @@ abstract class BaseController extends AbstractController
         }
 
         return new JsonResponse($entity);
+    }
+    
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $entityFounded = $this->repository->find($id);
+
+        if (is_null($entityFounded)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        $data = $request->toArray();
+
+        $entityUpdated = $this->factory->updateEntity($entityFounded, $data);
+
+        if ($entityUpdated == false) {
+            return $this->jsonResponseNotFound(false);
+        }
+
+        return new JsonResponse($entityUpdated);
     }
 }

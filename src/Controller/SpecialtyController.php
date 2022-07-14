@@ -6,7 +6,6 @@ use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,9 +19,14 @@ class SpecialtyController extends BaseController
         parent::__construct($specialtyRepository, $specialtyFactory);
     }
 
-    protected function jsonResponseNotFound(): JsonResponse
+    protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
     {
-        $error = ['Error' => 'Specialty Not Found'];
+        if ($mainEntity) {
+            $error = ['Error' => 'Specialty Not Found'];
+        } else {
+            $error = ['Error' => 'Doctor Not Found'];
+        }
+
         $statusCode = Response::HTTP_NOT_FOUND;
 
         return new JsonResponse($error, $statusCode);
@@ -44,24 +48,6 @@ class SpecialtyController extends BaseController
         }
 
         return true;
-    }
-
-    #[Route(path: '/specialties/{id}', name: 'specialties.update', methods: 'PUT')]
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $specialty = $this->specialtyRepository->find($id);
-
-        if (is_null($specialty)) {
-            return $this->jsonResponseNotFound();
-        }
-
-        $data = $request->toArray();
-
-        $this->specialtyFactory->updateSpecialty($specialty, $data);
-
-        $this->specialtyRepository->flush();
-
-        return new JsonResponse($specialty);
     }
 
     #[Route(path: '/specialties/{id}', name: 'specialties.destroy', methods: 'DELETE')]

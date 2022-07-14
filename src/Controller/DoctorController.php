@@ -18,9 +18,14 @@ class DoctorController extends BaseController
         parent::__construct($doctorRepository, $doctorFactory);
     }
 
-    protected function jsonResponseNotFound(): JsonResponse
+    protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
     {
-        $error = ['Error' => 'Doctor Not Found'];
+        if ($mainEntity) {
+            $error = ['Error' => 'Doctor Not Found'];
+        } else {
+            $error = ['Error' => 'Specialty Not Found'];
+        }
+
         $statusCode = Response::HTTP_NOT_FOUND;
 
         return new JsonResponse($error, $statusCode);
@@ -42,24 +47,6 @@ class DoctorController extends BaseController
         }
 
         return true;
-    }
-
-    #[Route(path: '/doctors/{id}', name: 'doctors.update', methods: 'PUT')]
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $doctor = $this->doctorRepository->find($id);
-
-        if (is_null($doctor)) {
-            return $this->jsonResponseNotFound();
-        }
-
-        $data = $request->toArray();
-
-        $this->doctorFactory->updateDoctor($doctor, $data);
-
-        $this->doctorRepository->flush();
-
-        return new JsonResponse($doctor);
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.destroy', methods: 'DELETE')]

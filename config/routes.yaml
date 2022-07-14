@@ -16,6 +16,10 @@ doctors.show:
     path: /doctors/{id}
     controller: App\Controller\DoctorController::show
     methods: GET
+doctors.update:
+    path: /doctors/{id}
+    controller: App\Controller\DoctorController::update
+    methods: PUT
 
 
 specialties.index:
@@ -32,3 +36,7 @@ specialties.show:
     path: /specialties/{id}
     controller: App\Controller\SpecialtyController::show
     methods: GET
+specialties.update:
+    path: /specialties/{id}
+    controller: App\Controller\SpecialtyController::update
+    methods: PUT
