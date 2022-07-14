@@ -47,10 +47,16 @@ class DoctorController extends AbstractController
     {
         $data = $request->toArray();
 
-        $checks = $this->doctorFactory->checkArrayToCreateDoctor($data);
+        $checkArrayToCreateDoctor = $this->doctorFactory->checkArrayToCreateDoctor($data);
 
-        if (!$checks) {
-            return $this->jsonResponseMissingParameters();
+        if (is_array($checkArrayToCreateDoctor)) {
+            $error = $checkArrayToCreateDoctor['Error'];
+            $statusCode = $checkArrayToCreateDoctor['Status Code'];
+
+            return new JsonResponse(
+                ['Error' => $error],
+                $statusCode,
+            );
         }
 
         $doctor = $this->doctorFactory->createDoctor($data);
