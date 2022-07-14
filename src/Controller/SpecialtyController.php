@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Entity;
+use App\Entity\Specialty;
 use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -37,22 +40,28 @@ class SpecialtyController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    protected function checkStore(array $data): bool|JsonResponse
+    protected function checkStore(Request $request): bool|JsonResponse
     {
-        $checkArrayToCreateSpecialty = $this->specialtyFactory->checkArrayToCreateSpecialty($data);
-
-        $error = $checkArrayToCreateSpecialty->error ?? true;
-
-        $check = true === $error ? true : false;
-
-        if (!$check) {
-            $message = $error->message;
-            $statusCode = $error->statusCode;
-
-            return new JsonResponse($message, $statusCode);
-        }
-
         return true;
+        // $checkArrayToCreateSpecialty = $this->specialtyFactory->checkArrayToCreateSpecialty($data);
+
+        // $error = $checkArrayToCreateSpecialty->error ?? true;
+
+        // $check = true === $error ? true : false;
+
+        // if (!$check) {
+        //     $message = $error->message;
+        //     $statusCode = $error->statusCode;
+
+        //     return new JsonResponse($message, $statusCode);
+        // }
+
+        // return true;
+    }
+
+    protected function createEntityObject(Request $request): Entity
+    {
+        return new Specialty();
     }
 
     #[Route(path: '/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]
