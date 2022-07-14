@@ -29,39 +29,73 @@ class SpecialtyController extends BaseController
 
     protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
     {
-        if ($mainEntity) {
-            $error = ['Error' => 'Specialty Not Found'];
-        } else {
-            $error = ['Error' => 'Doctor Not Found'];
-        }
+        $entity = $mainEntity ? 'Specialty' : 'Doctor';
+
+        $error = ['Error' => $entity.' Not Found'];
 
         $statusCode = Response::HTTP_NOT_FOUND;
 
         return new JsonResponse($error, $statusCode);
     }
 
+    protected function checkValueCreateSpecialty(string $value)
+    {
+        $value = strtolower($value);
+
+        $elementsToCreateEntity = Specialty::ELEMENTS_TO_CREATE_ENTITY;
+
+        $check = in_array($value, $elementsToCreateEntity);
+
+        return $check;
+    }
+
+    protected function checkRequestCreateSpecialty(Request $request): bool|JsonResponse
+    {
+        $specialtyValues = $request->toArray();
+
+        foreach ($specialtyValues as $specialtyValue => $specialtyElement) {
+            $check = $this->checkValueCreateSpecialty($specialtyValue);
+
+            if (!$check) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected function checkStore(Request $request): bool|JsonResponse
     {
+        $checkRequest = $this->checkRequestCreateSpecialty($request);
+
+        if (!$checkRequest) {
+            $message = ['Error' => 'This Resource is Missing Parameters'];
+            $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+
+            return new JsonResponse($message, $statusCode);
+        }
+
         return true;
-        // $checkArrayToCreateSpecialty = $this->specialtyFactory->checkArrayToCreateSpecialty($data);
+    }
 
-        // $error = $checkArrayToCreateSpecialty->error ?? true;
-
-        // $check = true === $error ? true : false;
-
-        // if (!$check) {
-        //     $message = $error->message;
-        //     $statusCode = $error->statusCode;
-
-        //     return new JsonResponse($message, $statusCode);
-        // }
-
-        // return true;
+    protected function getSpecialtyValues(Request $request)
+    {
+        return [
+            'Title' => $this->getParameterInBody($request, 'Title'),
+            'Description' => $this->getParameterInBody($request, 'Description'),
+        ];
     }
 
     protected function createEntityObject(Request $request): Entity
     {
-        return new Specialty();
+        $values = $this->getSpecialtyValues($request);
+
+        $specialty = new Specialty();
+
+        $specialty->setTitle($values['Title']);
+        $specialty->setDescription($values['Description']);
+
+        return $specialty;
     }
 
     #[Route(path: '/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]

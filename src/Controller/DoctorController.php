@@ -56,8 +56,6 @@ class DoctorController extends BaseController
             $check = $this->checkValueCreateDoctor($doctorValue);
 
             if (!$check) {
-                dd($doctorElement, $doctorValue, Doctor::ELEMENTS_TO_CREATE_ENTITY);
-
                 return false;
             }
         }

@@ -12,6 +12,9 @@ use JsonSerializable;
 class Specialty implements JsonSerializable, Entity
 {
     public const ELEMENTS_TO_CREATE_ENTITY = [
+        'title', 'description'
+    ];
+    public const REQUIRED_ELEMENTS_TO_CREATE_ENTITY = [
         'title',
     ];
 
