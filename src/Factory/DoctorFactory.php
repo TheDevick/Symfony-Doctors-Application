@@ -7,7 +7,7 @@ use App\Repository\SpecialtyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
-class DoctorFactory
+class DoctorFactory implements Factory
 {
     public function __construct(private SpecialtyRepository $specialtyRepository)
     {
@@ -95,7 +95,7 @@ class DoctorFactory
         return $doctor;
     }
 
-    public function createDoctor(array $data): Doctor|false
+    public function createEntity(array $data): Doctor|false
     {
         if (!$this->checkArrayToCreateDoctor($data)) {
             return false;

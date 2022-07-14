@@ -4,8 +4,9 @@ namespace App\Factory;
 
 use App\Entity\Specialty;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Response;
 
-class SpecialtyFactory
+class SpecialtyFactory implements Factory
 {
     public array $specialtyRequiredElements = ['Title'];
     public array $specialtyAllElements = ['Title', 'Doctors', 'Description'];
@@ -49,7 +50,7 @@ class SpecialtyFactory
         return $specialty;
     }
 
-    public function createSpecialty(array $data): Specialty|false
+    public function createEntity(array $data): Specialty|false
     {
         if (!$this->checkArrayToCreateSpecialty($data)) {
             return false;
