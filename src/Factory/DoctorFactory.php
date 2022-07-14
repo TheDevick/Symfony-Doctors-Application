@@ -13,8 +13,8 @@ class DoctorFactory
     {
     }
 
-    public array $doctorRequiredElements = ['Name', 'Area', 'Subscription', 'SpecialtyId'];
-    public array $doctorAllElements = ['Name', 'Area', 'Subscription', 'SpecialtyId'];
+    public array $doctorRequiredElements = ['Name', 'Area', 'Subscription', 'Specialty'];
+    public array $doctorAllElements = ['Name', 'Area', 'Subscription', 'Specialty'];
 
     public function checkArrayToCreateDoctor(array $array): array|bool
     {
@@ -43,7 +43,7 @@ class DoctorFactory
 
     private function checkSpecialtyExists(array $data): bool
     {
-        $specialtyId = $data['SpecialtyId'];
+        $specialtyId = $data['Specialty'];
 
         $specialty = $this->specialtyRepository->find($specialtyId);
 
@@ -78,7 +78,7 @@ class DoctorFactory
             $arrayContains = $collection->containsKey($element);
 
             if ($arrayContains) {
-                if ('SpecialtyId' == $element) {
+                if ('Specialty' == $element) {
                     $specialtyId = $collection->get($element);
 
                     $this->setSpecialty($doctor, $specialtyId);
