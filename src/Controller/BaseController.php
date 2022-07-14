@@ -6,6 +6,7 @@ use App\Factory\Factory;
 use App\Repository\Repository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class BaseController extends AbstractController
 {
@@ -15,10 +16,29 @@ abstract class BaseController extends AbstractController
     ) {
     }
 
+    abstract protected function checkStore(array $data): bool|JsonResponse;
+
     public function index(): JsonResponse
     {
         $entities = $this->repository->findAll();
 
         return new JsonResponse($entities);
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $data = $request->toArray();
+
+        $check = $this->checkStore($data);
+
+        if (is_object($check)) {
+            return $check;
+        }
+
+        $entity = $this->factory->createEntity($data);
+
+        $this->repository->add($entity, true);
+
+        return new JsonResponse($entity);
     }
 }

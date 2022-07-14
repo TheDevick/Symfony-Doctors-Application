@@ -26,36 +26,22 @@ class DoctorController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    private function jsonResponseMissingParameters(): JsonResponse
+    protected function checkStore(array $data): bool|JsonResponse
     {
-        $error = ['Error' => 'This Resource is Missing Parameters'];
-        $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-
-        return new JsonResponse($error, $statusCode);
-    }
-
-    #[Route(path: '/doctors', name: 'doctors.store', methods: 'POST')]
-    public function store(Request $request): JsonResponse
-    {
-        $data = $request->toArray();
-
         $checkArrayToCreateDoctor = $this->doctorFactory->checkArrayToCreateDoctor($data);
 
-        if (is_array($checkArrayToCreateDoctor)) {
-            $error = $checkArrayToCreateDoctor['Error'];
-            $statusCode = $checkArrayToCreateDoctor['Status Code'];
+        $error = $checkArrayToCreateDoctor->error ?? true;
 
-            return new JsonResponse(
-                ['Error' => $error],
-                $statusCode,
-            );
+        $check = true === $error ? true : false;
+
+        if (!$check) {
+            $message = $error->message;
+            $statusCode = $error->statusCode;
+
+            return new JsonResponse($message, $statusCode);
         }
 
-        $doctor = $this->doctorFactory->createDoctor($data);
-
-        $this->doctorRepository->add($doctor, true);
-
-        return new JsonResponse($doctor);
+        return true;
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.show', methods: 'GET')]

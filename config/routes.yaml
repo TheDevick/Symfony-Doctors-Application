@@ -7,8 +7,18 @@ doctors.index:
     controller: App\Controller\DoctorController::index
     methods: GET
 
+doctors.store:
+    path: /doctors
+    controller: App\Controller\DoctorController::store
+    methods: POST
+
 
 specialties.index:
     path: /specialties
     controller: App\Controller\SpecialtyController::index
     methods: GET
+
+specialties.store:
+    path: /specialties
+    controller: App\Controller\SpecialtyController::store
+    methods: POST

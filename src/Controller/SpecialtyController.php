@@ -28,30 +28,22 @@ class SpecialtyController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    private function jsonResponseMissingParameters(): JsonResponse
+    protected function checkStore(array $data): bool|JsonResponse
     {
-        $error = ['Error' => 'This Resource is Missing Parameters'];
-        $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        $checkArrayToCreateSpecialty = $this->specialtyFactory->checkArrayToCreateSpecialty($data);
 
-        return new JsonResponse($error, $statusCode);
-    }
+        $error = $checkArrayToCreateSpecialty->error ?? true;
 
-    #[Route(path: '/specialties', name: 'specialties.store', methods: 'POST')]
-    public function store(Request $request): JsonResponse
-    {
-        $data = $request->toArray();
+        $check = true === $error ? true : false;
 
-        $checks = $this->specialtyFactory->checkArrayToCreateSpecialty($data);
+        if (!$check) {
+            $message = $error->message;
+            $statusCode = $error->statusCode;
 
-        if (!$checks) {
-            return $this->jsonResponseMissingParameters();
+            return new JsonResponse($message, $statusCode);
         }
 
-        $specialty = $this->specialtyFactory->createSpecialty($data);
-
-        $this->specialtyRepository->add($specialty, true);
-
-        return new JsonResponse($specialty);
+        return true;
     }
 
     #[Route(path: '/specialties/{id}', name: 'specialties.show', methods: 'GET')]
