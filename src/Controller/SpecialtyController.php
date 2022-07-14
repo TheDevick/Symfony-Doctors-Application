@@ -50,20 +50,6 @@ class SpecialtyController extends BaseController
         return true;
     }
 
-    #[Route(path: '/specialties/{id}', name: 'specialties.destroy', methods: 'DELETE')]
-    public function destroy(int $id): JsonResponse
-    {
-        $specialty = $this->specialtyRepository->find($id);
-
-        if (is_null($specialty)) {
-            return $this->jsonResponseNotFound();
-        }
-
-        $this->specialtyRepository->remove($specialty, true);
-
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
-    }
-
     #[Route(path: '/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]
     public function showDoctors(int $id)
     {

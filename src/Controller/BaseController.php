@@ -7,6 +7,7 @@ use App\Repository\Repository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseController extends AbstractController
 {
@@ -71,5 +72,18 @@ abstract class BaseController extends AbstractController
         }
 
         return new JsonResponse($entityUpdated);
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $entity = $this->repository->find($id);
+
+        if (is_null($entity)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        $this->repository->remove($entity, true);
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
