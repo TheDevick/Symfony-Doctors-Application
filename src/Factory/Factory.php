@@ -2,11 +2,8 @@
 
 namespace App\Factory;
 
-use App\Entity\Entity;
+use Zenstruck\Foundry\ModelFactory;
 
-interface Factory
+abstract class Factory extends ModelFactory
 {
-    public function createEntity(array $data): Entity|false;
-
-    public function updateEntity(Entity $entity, array $data): Entity|false;
 }
