@@ -2,26 +2,19 @@
 
 namespace App\Repository;
 
+use App\Entity\Entity;
 use App\Entity\Specialty;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Specialty>
- *
- * @method Specialty|null find($id, $lockMode = null, $lockVersion = null)
- * @method Specialty|null findOneBy(array $criteria, array $orderBy = null)
- * @method Specialty[]    findAll()
- * @method Specialty[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class SpecialtyRepository extends ServiceEntityRepository
+class SpecialtyRepository extends ServiceEntityRepository implements Repository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Specialty::class);
     }
 
-    public function add(Specialty $entity, bool $flush = false): void
+    public function add(Entity $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +23,7 @@ class SpecialtyRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Specialty $entity, bool $flush = false): void
+    public function remove(Entity $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -43,29 +36,4 @@ class SpecialtyRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->flush();
     }
-
-//    /**
-//     * @return Specialty[] Returns an array of Specialty objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Specialty
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
