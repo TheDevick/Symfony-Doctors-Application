@@ -11,7 +11,7 @@ class SpecialtyFactory implements Factory
     public array $specialtyRequiredElements = ['Title'];
     public array $specialtyAllElements = ['Title', 'Doctors', 'Description'];
 
-    public function checkArrayToCreateSpecialty(array $array): bool
+    public function checkArrayToCreateSpecialty(array $array): object|bool
     {
         $collection = new ArrayCollection($array);
 
@@ -19,7 +19,17 @@ class SpecialtyFactory implements Factory
             $arrayContains = $collection->containsKey($value);
 
             if (!$arrayContains) {
-                return false;
+                $message = ['Error' => 'This Resource is Missing Parameters'];
+                $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+
+                $error = (object) [
+                    'message' => $message,
+                    'statusCode' => $statusCode,
+                ];
+
+                return (object) [
+                    'error' => $error,
+                ];
             }
         }
 
