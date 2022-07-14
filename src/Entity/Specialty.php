@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: SpecialtyRepository::class)]
-class Specialty implements JsonSerializable
+class Specialty implements JsonSerializable, Entity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
