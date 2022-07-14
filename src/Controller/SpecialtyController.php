@@ -37,11 +37,9 @@ class SpecialtyController extends AbstractController
     #[Route(path: '/specialties', name: 'specialties.index', methods: 'GET')]
     public function index(): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/specialties',
-            'Name' => 'Specialties.Index',
-            'Methods' => 'GET',
-        ]);
+        $specialties = $this->specialtyRepository->findAll();
+
+        return new JsonResponse($specialties);
     }
 
     #[Route(path: '/specialties', name: 'specialties.store', methods: 'POST')]
