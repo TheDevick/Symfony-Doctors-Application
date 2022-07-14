@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Factory;
+
+use App\Entity\Specialty;
+use Doctrine\Common\Collections\ArrayCollection;
+
+class SpecialtyFactory
+{
+    public array $specialtyRequiredElements = ['Title'];
+    public array $specialtyAllElements = ['Title', 'Doctors', 'Description'];
+
+    public function checkArrayToCreateSpecialty(array $array): bool
+    {
+        $collection = new ArrayCollection($array);
+
+        foreach ($this->specialtyRequiredElements as $value) {
+            $arrayContains = $collection->containsKey($value);
+
+            if (!$arrayContains) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function specialtySetValue(Specialty $specialty, string $element, $value)
+    {
+        $functionName = "set$element";
+
+        $specialty->$functionName($value);
+    }
+
+    private function specialtySetValues(Specialty $specialty, array $values): Specialty
+    {
+        $collection = new ArrayCollection($values);
+
+        foreach ($this->specialtyAllElements as $element) {
+            $arrayContains = $collection->containsKey($element);
+
+            if ($arrayContains) {
+                $value = $collection->get($element);
+
+                $this->specialtySetValue($specialty, $element, $value);
+            }
+        }
+
+        return $specialty;
+    }
+
+    public function createSpecialty(array $data): Specialty|false
+    {
+        if (!$this->checkArrayToCreateSpecialty($data)) {
+            return false;
+        }
+
+        $specialty = new Specialty();
+
+        $this->specialtySetValues($specialty, $data);
+
+        return $specialty;
+    }
+
+    public function updateSpecialty(Specialty $specialty, array $data): Specialty
+    {
+        $this->specialtySetValues($specialty, $data);
+
+        return $specialty;
+    }
+}
