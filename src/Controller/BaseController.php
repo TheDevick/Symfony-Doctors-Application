@@ -17,12 +17,15 @@ abstract class BaseController extends AbstractController
     ) {
     }
 
+    abstract protected function getEntityElements(): array;
+
     abstract protected function checkStore(array $data): bool|JsonResponse;
+
     abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
 
     protected function getParameterInBody(Request $request, string $parameter, $default = null)
     {
-        if ($request->getContent() == null) {
+        if (is_null($request->getContent())) {
             return false;
         }
 
@@ -42,29 +45,57 @@ abstract class BaseController extends AbstractController
         return array_change_key_case($array, CASE_LOWER);
     }
 
-    protected function sortRequestFilter(Request $request): array
+    protected function getSortOnRequest(Request $request): array
     {
         $defaultSortValue = ['id' => 'ASC'];
 
         $sortBody = $this->getParameterInBody($request, 'Sort', $defaultSortValue);
-        $sortBodyType = gettype($sortBody);
 
-        if ($sortBodyType == 'array') {
-            $sort = $this->arrayKeysToLowerCase($sortBody);
+        if (is_array($sortBody)) {
+            return $this->arrayKeysToLowerCase($sortBody);
         }
 
-        if ($sortBodyType != 'array' && $sortBodyType != 'string') {
-            $sort = $defaultSortValue;
+        return $defaultSortValue;
+    }
+
+    protected function checkFilters($filters)
+    {
+        if (!is_array($filters)) {
+            return false;
         }
 
-        return $sort;
+        foreach ($filters as $key => $filter) {
+            $filterExistsOnEntityElements = in_array($key, $this->getEntityElements());
+
+            if (!$filterExistsOnEntityElements) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function getFiltersOnRequest(Request $request, bool $lowerCase = true): array
+    {
+        $filters = $this->getParameterInBody($request, 'Filter');
+
+        if (is_null($filters) || !$this->checkFilters($filters)) {
+            return [];
+        }
+
+        if ($lowerCase) {
+            $filters = $this->arrayKeysToLowerCase($filters);
+        }
+
+        return $filters;
     }
 
     public function index(Request $request): JsonResponse
     {
-        $sort = $this->sortRequestFilter($request);
+        $sort = $this->getSortOnRequest($request);
+        $filters = $this->getFiltersOnRequest($request);
 
-        $entities = $this->repository->findBy([], orderBy: $sort);
+        $entities = $this->repository->findBy($filters, orderBy: $sort);
 
         return new JsonResponse($entities);
     }

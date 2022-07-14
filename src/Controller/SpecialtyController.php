@@ -19,6 +19,11 @@ class SpecialtyController extends BaseController
         parent::__construct($specialtyRepository, $specialtyFactory);
     }
 
+    protected function getEntityElements(): array
+    {
+        return ['Id', 'Title', 'Doctors', 'Description'];
+    }
+
     protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
     {
         if ($mainEntity) {

@@ -16,6 +16,11 @@ class DoctorController extends BaseController
         parent::__construct($doctorRepository, $doctorFactory);
     }
 
+    protected function getEntityElements(): array
+    {
+        return ['Id', 'Name', 'Area', 'Subscription', 'SpecialtyId'];
+    }
+
     protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
     {
         if ($mainEntity) {
