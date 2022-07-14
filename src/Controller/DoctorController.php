@@ -91,12 +91,16 @@ class DoctorController extends AbstractController
     }
 
     #[Route(path: '/doctors/{id}', name: 'doctors.destroy', methods: 'DELETE')]
-    public function destroy(): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        return new JsonResponse([
-            'Path' => '/doctors/{id}',
-            'Name' => 'Doctors.Destroy',
-            'Methods' => 'DELETE',
-        ]);
+        $doctor = $this->doctorRepository->find($id);
+
+        if (is_null($doctor)) {
+            return $this->jsonResponseNotFound();
+        }
+
+        $this->doctorRepository->remove($doctor, true);
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
