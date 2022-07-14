@@ -77,15 +77,15 @@ class DoctorFactory
         foreach ($this->doctorAllElements as $element) {
             $arrayContains = $collection->containsKey($element);
 
-            if ('SpecialtyId' == $element) {
-                $specialtyId = $collection->get($element);
-
-                $this->setSpecialty($doctor, $specialtyId);
-
-                continue;
-            }
-
             if ($arrayContains) {
+                if ($element == 'SpecialtyId') {
+                    $specialtyId = $collection->get($element);
+    
+                    $this->setSpecialty($doctor, $specialtyId);
+    
+                    continue;
+                }
+
                 $value = $collection->get($element);
 
                 $this->doctorSetValue($doctor, $element, $value);
