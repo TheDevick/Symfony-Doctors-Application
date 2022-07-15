@@ -22,7 +22,7 @@ class Request extends HttpFoundationRequest
         return $body;
     }
 
-    public function getBodyValues(): array|false
+    public function getBodyParameters(): array|false
     {
         $body = $this->getBody();
 
@@ -30,9 +30,9 @@ class Request extends HttpFoundationRequest
             return false;
         }
 
-        $bodyValues = array_values($body);
+        $bodyParameters = array_values($body);
 
-        return $bodyValues;
+        return $bodyParameters;
     }
 
     public function getBodyKeys(): array|false
@@ -48,7 +48,7 @@ class Request extends HttpFoundationRequest
         return $bodyKeys;
     }
 
-    public function getParameterBody(string $parameter, $default = null): mixed
+    public function getParameterBody(string $parameter, mixed $default = null): mixed
     {
         $body = $this->getBody();
 
@@ -56,30 +56,30 @@ class Request extends HttpFoundationRequest
             return false;
         }
 
-        if (!$this->checkBodyValueExists($parameter)) {
+        if (!$this->checkBodyParameterExists($parameter)) {
             return $default;
         }
 
-        $value = $body[$parameter];
+        $parameter = $body[$parameter];
 
-        return $value;
+        return $parameter;
     }
 
-    public function checkBodyValueExists(string $value, callable $filter = null): bool
+    public function checkBodyParameterExists(string $parameter, callable $filter = null): bool
     {
-        $bodyValues = $this->getBodyValues();
+        $bodyParameters = $this->getBodyParameters();
 
-        if (!$bodyValues) {
+        if (!$bodyParameters) {
             return false;
         }
 
-        $array = $bodyValues;
+        $array = $bodyParameters;
 
         if (!is_null($filter)) {
-            $array = array_map($filter, $bodyValues);
+            $array = array_map($filter, $bodyParameters);
         }
 
-        return in_array($value, $array);
+        return in_array($parameter, $array);
     }
 
     public function checkBodyKeyExists(string $key, callable $filter = null): bool
@@ -99,7 +99,7 @@ class Request extends HttpFoundationRequest
         return in_array($key, $array);
     }
 
-    public function toAllParametersBody(\Closure $closjure)
+    public function toAllParametersBody(\Closure $closjure): bool
     {
         $body = $this->getBody();
 
@@ -110,5 +110,7 @@ class Request extends HttpFoundationRequest
         foreach ($body as $key => $value) {
             $closjure($key, $value);
         }
+
+        return true;
     }
 }
