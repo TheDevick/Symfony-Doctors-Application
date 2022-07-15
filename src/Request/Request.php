@@ -10,4 +10,15 @@ class Request extends HttpFoundationRequest
     {
         return Request::createFromGlobals();
     }
+
+    public function getBody(): array|false
+    {
+        if (is_null($this->getContent())) {
+            return false;
+        }
+
+        $body = $this->toArray();
+
+        return $body;
+    }
 }
