@@ -98,4 +98,17 @@ class Request extends HttpFoundationRequest
 
         return in_array($key, $array);
     }
+
+    public function toAllParametersBody(\Closure $closjure)
+    {
+        $body = $this->getBody();
+
+        if (!$body) {
+            return false;
+        }
+
+        foreach ($body as $key => $value) {
+            $closjure($key, $value);
+        }
+    }
 }
