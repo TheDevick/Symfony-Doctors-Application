@@ -81,4 +81,21 @@ class Request extends HttpFoundationRequest
 
         return in_array($value, $array);
     }
+
+    public function checkBodyKeyExists(string $key, callable $filter = null): bool
+    {
+        $bodyKeys = $this->getBodyKeys();
+
+        if (!$bodyKeys) {
+            return false;
+        }
+
+        $array = $bodyKeys;
+
+        if (!is_null($filter)) {
+            $array = array_map($filter, $bodyKeys);
+        }
+
+        return in_array($key, $array);
+    }
 }
