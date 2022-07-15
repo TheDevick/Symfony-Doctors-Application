@@ -24,7 +24,7 @@ class DoctorController extends BaseController
     {
         $entity = $mainEntity ? 'Doctor' : 'Specialty';
 
-        $error = ['Error' => $entity . ' Not Found'];
+        $error = ['Error' => "$entity Not Found"];
 
         $statusCode = Response::HTTP_NOT_FOUND;
 
@@ -66,7 +66,7 @@ class DoctorController extends BaseController
         $doctor->setArea($values['Area']);
         $doctor->setSubscription($values['Subscription']);
 
-        $setSpecialty = $doctor->setSpecialtyById($values['Specialty']);
+        $setSpecialty = $this->setSpecialtyById($doctor, $values['Specialty']);
 
         if (!$setSpecialty) {
             return false;
@@ -77,7 +77,7 @@ class DoctorController extends BaseController
         return $doctor;
     }
 
-    protected function createEntityObject(CustomRequest $request): Doctor
+    protected function createEntityObject(CustomRequest $request): Doctor|false
     {
         $doctor = new Doctor();
 
@@ -85,7 +85,7 @@ class DoctorController extends BaseController
 
         $setRequired = $this->setDoctorRequiredElements($doctor, $body);
 
-        if ($setRequired) {
+        if (!$setRequired) {
             return false;
         }
 
@@ -93,5 +93,13 @@ class DoctorController extends BaseController
         // because Doctor Entity doesn't have unrequired elements
 
         return $doctor;
+    }
+
+    protected function onCreateEntityError(): JsonResponse
+    {
+        $message = ['Error' => 'Specialty not Found'];
+        $statusCode = Response::HTTP_NOT_FOUND;
+
+        return new JsonResponse($message, $statusCode);
     }
 }
