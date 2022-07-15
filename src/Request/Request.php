@@ -21,4 +21,17 @@ class Request extends HttpFoundationRequest
 
         return $body;
     }
+
+    public function getBodyValues(): array|false
+    {
+        $body = $this->getBody();
+
+        if (!$body) {
+            return false;
+        }
+
+        $bodyValues = array_values($body);
+
+        return $bodyValues;
+    }
 }
