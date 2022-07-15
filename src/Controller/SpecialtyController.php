@@ -25,7 +25,7 @@ class SpecialtyController extends BaseController
     {
         $entity = $mainEntity ? 'Specialty' : 'Doctor';
 
-        $error = ['Error' => $entity.' Not Found'];
+        $error = ['Error' => "$entity Not Found"];
 
         $statusCode = Response::HTTP_NOT_FOUND;
 
@@ -87,5 +87,14 @@ class SpecialtyController extends BaseController
         }
 
         return new JsonResponse($doctors);
+    }
+
+    // Never Used
+    protected function onCreateEntityError(): JsonResponse
+    {
+        $message = ['Error' => 'Doctor not Found'];
+        $statusCode = Response::HTTP_NOT_FOUND;
+
+        return new JsonResponse($message, $statusCode);
     }
 }
