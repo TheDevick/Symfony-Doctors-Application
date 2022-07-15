@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Entity;
 use App\Factory\Factory;
 use App\Repository\Repository;
+use App\Request\Request as CustomRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,98 +19,24 @@ abstract class BaseController extends AbstractController
     ) {
     }
 
-    abstract protected function getEntityElements(): array;
-
-    abstract protected function checkStore(Request $request): bool|JsonResponse;
-
     abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
 
-    abstract protected function createEntityObject(Request $request): Entity;
+    abstract protected function createEntityObject(CustomRequest $request): Entity;
 
-    protected function getParameterInBody(Request $request, string $parameter, $default = null)
-    {
-        if (is_null($request->getContent())) {
-            return false;
-        }
-
-        $allParameters = $request->toArray();
-
-        if (!array_key_exists($parameter, $allParameters)) {
-            return $default;
-        }
-
-        $value = $allParameters[$parameter];
-
-        return $value;
-    }
-
-    protected function arrayKeysToLowerCase(array $array)
-    {
-        return array_change_key_case($array, CASE_LOWER);
-    }
-
-    protected function getSortOnRequest(Request $request): array
-    {
-        $defaultSortValue = ['id' => 'ASC'];
-
-        $sortBody = $this->getParameterInBody($request, 'Sort', $defaultSortValue);
-
-        if (is_array($sortBody)) {
-            return $this->arrayKeysToLowerCase($sortBody);
-        }
-
-        return $defaultSortValue;
-    }
-
-    protected function checkFilters($filters)
-    {
-        if (!is_array($filters)) {
-            return false;
-        }
-
-        foreach ($filters as $key => $filter) {
-            $filterExistsOnEntityElements = in_array($key, $this->getEntityElements());
-
-            if (!$filterExistsOnEntityElements) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    protected function getFiltersOnRequest(Request $request, bool $lowerCase = true): array
-    {
-        $filters = $this->getParameterInBody($request, 'Filter');
-
-        if (is_null($filters) || !$this->checkFilters($filters)) {
-            return [];
-        }
-
-        if ($lowerCase) {
-            $filters = $this->arrayKeysToLowerCase($filters);
-        }
-
-        return $filters;
-    }
+    abstract protected function checkStore(CustomRequest $request): bool;
 
     public function index(Request $request): JsonResponse
     {
-        $sort = $this->getSortOnRequest($request);
-        $filters = $this->getFiltersOnRequest($request);
-
-        $entities = $this->repository->findBy($filters, orderBy: $sort);
+        $entities = $this->repository->findAll();
 
         return new JsonResponse($entities);
     }
 
     public function store(Request $request): JsonResponse
     {
-        $check = $this->checkStore($request);
+        $request = CustomRequest::createRequest();
 
-        if (is_object($check)) {
-            return $check;
-        }
+        $checkStore = $this->checkStore($request);
 
         $entity = $this->createEntityObject($request);
 

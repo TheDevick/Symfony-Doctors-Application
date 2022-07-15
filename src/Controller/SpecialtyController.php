@@ -2,29 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\Entity;
 use App\Entity\Specialty;
 use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
+use App\Request\Request as CustomRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SpecialtyController extends BaseController
 {
     public function __construct(
-        private SpecialtyRepository $specialtyRepository,
         private DoctorRepository $doctorRepository,
+        private SpecialtyRepository $specialtyRepository,
         private SpecialtyFactory $specialtyFactory
     ) {
         parent::__construct($specialtyRepository, $specialtyFactory);
-    }
-
-    protected function getEntityElements(): array
-    {
-        return ['Id', 'Title', 'Doctors', 'Description'];
     }
 
     protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
@@ -38,24 +32,13 @@ class SpecialtyController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    protected function checkValueCreateSpecialty(string $value)
+    protected function checkStore(CustomRequest $request): bool
     {
-        $value = strtolower($value);
+        $elementsTocreate = Specialty::elementsToCreate()['required'];
+        $body = $request->getBody();
 
-        $elementsToCreateEntity = Specialty::ELEMENTS_TO_CREATE_ENTITY;
-
-        $check = in_array($value, $elementsToCreateEntity);
-
-        return $check;
-    }
-
-    protected function checkRequestCreateSpecialty(Request $request): bool|JsonResponse
-    {
-        $specialtyValues = $request->toArray();
-
-        foreach ($specialtyValues as $specialtyValue => $specialtyElement) {
-            $check = $this->checkValueCreateSpecialty($specialtyValue);
-
+        foreach ($elementsTocreate as $elementToCreate) {
+            $check = $request->checkBodyKeyExists($elementToCreate, 'strtolower');
             if (!$check) {
                 return false;
             }
@@ -64,36 +47,32 @@ class SpecialtyController extends BaseController
         return true;
     }
 
-    protected function checkStore(Request $request): bool|JsonResponse
+    private function setSpecialtyRequiredElements(Specialty $specialty, array $values): Specialty
     {
-        $checkRequest = $this->checkRequestCreateSpecialty($request);
+        $specialty->setTitle($values['Title']);
 
-        if (!$checkRequest) {
-            $message = ['Error' => 'This Resource is Missing Parameters'];
-            $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        return $specialty;
+    }
 
-            return new JsonResponse($message, $statusCode);
+    private function setSpecialtyUnrequiredElements(Specialty $specialty, array $values): Specialty
+    {
+        if (in_array('Description', $values)) {
+            $description = $values['Description'];
+            $specialty->setDescription($description);
         }
 
-        return true;
+        return $specialty;
     }
 
-    protected function getSpecialtyValues(Request $request)
+    protected function createEntityObject(CustomRequest $request): Specialty
     {
-        return [
-            'Title' => $this->getParameterInBody($request, 'Title'),
-            'Description' => $this->getParameterInBody($request, 'Description'),
-        ];
-    }
-
-    protected function createEntityObject(Request $request): Entity
-    {
-        $values = $this->getSpecialtyValues($request);
-
         $specialty = new Specialty();
 
-        $specialty->setTitle($values['Title']);
-        $specialty->setDescription($values['Description']);
+        $body = $request->getBody();
+
+        $this->setSpecialtyRequiredElements($specialty, $body);
+
+        $this->setSpecialtyUnrequiredElements($specialty, $body);
 
         return $specialty;
     }
