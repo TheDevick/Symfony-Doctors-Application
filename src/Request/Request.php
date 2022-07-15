@@ -20,7 +20,9 @@ class Request extends HttpFoundationRequest
      */
     public function getBody(): array|false
     {
-        if (is_null($this->getContent())) {
+        $bodyContent = $this->getContent();
+
+        if (!$bodyContent) {
             return false;
         }
 
@@ -90,7 +92,7 @@ class Request extends HttpFoundationRequest
      */
     public function checkBodyParameterExists(string $parameter, callable $filter = null): bool
     {
-        $bodyParameters = $this->getBodyParameters();
+        $bodyParameters = $this->getBodyKeys();
 
         if (!$bodyParameters) {
             return false;
