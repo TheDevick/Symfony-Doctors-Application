@@ -47,4 +47,21 @@ class Request extends HttpFoundationRequest
 
         return $bodyKeys;
     }
+
+    public function getParameterBody(string $parameter, $default = null): mixed
+    {
+        $body = $this->getBody();
+
+        if (!$body) {
+            return false;
+        }
+
+        if (!$this->checkParameterExistsInBody($parameter)) {
+            return $default;
+        }
+
+        $value = $body[$parameter];
+
+        return $value;
+    }
 }
