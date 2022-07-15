@@ -6,11 +6,18 @@ use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class Request extends HttpFoundationRequest
 {
+    /**
+     * Create Custom Request Object.
+     */
     public static function createRequest(): Request
     {
         return Request::createFromGlobals();
     }
 
+    /**
+     * Return the Request Body.
+     * Return False if Body Content is Null.
+     */
     public function getBody(): array|false
     {
         if (is_null($this->getContent())) {
@@ -22,6 +29,10 @@ class Request extends HttpFoundationRequest
         return $body;
     }
 
+    /**
+     * Return an Array with the Request Body Parameters
+     * Return False if Body Content is Null.
+     */
     public function getBodyParameters(): array|false
     {
         $body = $this->getBody();
@@ -35,6 +46,10 @@ class Request extends HttpFoundationRequest
         return $bodyParameters;
     }
 
+    /**
+     * Return an Array with the Request Body Keys
+     * Return False if Body Content is Null.
+     */
     public function getBodyKeys(): array|false
     {
         $body = $this->getBody();
@@ -48,6 +63,10 @@ class Request extends HttpFoundationRequest
         return $bodyKeys;
     }
 
+    /**
+     * Return the Parameter from Request Body
+     * Return False if Body Content is Null.
+     */
     public function getParameterBody(string $parameter, mixed $default = null): mixed
     {
         $body = $this->getBody();
@@ -65,6 +84,10 @@ class Request extends HttpFoundationRequest
         return $parameter;
     }
 
+    /**
+     * Check if Parameter Exists in Body Request
+     * Return False if Body Content is Null.
+     */
     public function checkBodyParameterExists(string $parameter, callable $filter = null): bool
     {
         $bodyParameters = $this->getBodyParameters();
@@ -82,6 +105,12 @@ class Request extends HttpFoundationRequest
         return in_array($parameter, $array);
     }
 
+    /**
+     * Check if Key Exists in Body Request
+     * Return False if Body Content is Null.
+     *
+     * @param callable $filter
+     */
     public function checkBodyKeyExists(string $key, callable $filter = null): bool
     {
         $bodyKeys = $this->getBodyKeys();
@@ -99,6 +128,13 @@ class Request extends HttpFoundationRequest
         return in_array($key, $array);
     }
 
+    /**
+     * Run a Closjure to All Parameters in Body
+     * Return False if Body Content is Null.
+     *
+     * @param string   $key
+     * @param callable $filter
+     */
     public function toAllParametersBody(\Closure $closjure): bool
     {
         $body = $this->getBody();
