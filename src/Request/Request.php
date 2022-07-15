@@ -56,12 +56,29 @@ class Request extends HttpFoundationRequest
             return false;
         }
 
-        if (!$this->checkParameterExistsInBody($parameter)) {
+        if (!$this->checkBodyValueExists($parameter)) {
             return $default;
         }
 
         $value = $body[$parameter];
 
         return $value;
+    }
+
+    public function checkBodyValueExists(string $value, callable $filter = null): bool
+    {
+        $bodyValues = $this->getBodyValues();
+
+        if (!$bodyValues) {
+            return false;
+        }
+
+        $array = $bodyValues;
+
+        if (!is_null($filter)) {
+            $array = array_map($filter, $bodyValues);
+        }
+
+        return in_array($value, $array);
     }
 }
