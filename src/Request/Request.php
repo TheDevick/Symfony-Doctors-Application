@@ -34,4 +34,17 @@ class Request extends HttpFoundationRequest
 
         return $bodyValues;
     }
+
+    public function getBodyKeys(): array|false
+    {
+        $body = $this->getBody();
+
+        if (!$body) {
+            return false;
+        }
+
+        $bodyKeys = array_keys($body);
+
+        return $bodyKeys;
+    }
 }
