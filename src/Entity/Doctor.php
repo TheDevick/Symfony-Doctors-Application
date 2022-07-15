@@ -87,6 +87,19 @@ class Doctor extends Entity
         return $this;
     }
 
+    public function setSpecialtyById(int $specialtyId)
+    {
+        $specialty = $this->specialtyRepository->find($specialtyId);
+
+        if (is_null($specialty)) {
+            return false;
+        }
+
+        $this->setSpecialty($specialty);
+
+        return $this;
+    }
+
     public function view(): array
     {
         $id = $this->getId() ?? null;
