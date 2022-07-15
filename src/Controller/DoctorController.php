@@ -47,6 +47,19 @@ class DoctorController extends BaseController
         return true;
     }
 
+    private function setSpecialtyById(Doctor $doctor, int $specialtyId)
+    {
+        $specialty = $this->specialtyRepository->find($specialtyId);
+
+        if (is_null($specialty)) {
+            return false;
+        }
+
+        $doctor->setSpecialty($specialty);
+
+        return $doctor;
+    }
+
     private function setDoctorRequiredElements(Doctor $doctor, array $values): Doctor|false
     {
         $doctor->setName($values['Name']);
