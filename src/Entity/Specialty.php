@@ -6,17 +6,18 @@ use App\Repository\SpecialtyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: SpecialtyRepository::class)]
-class Specialty implements JsonSerializable, Entity
+class Specialty extends Entity
 {
-    public const ELEMENTS_TO_CREATE_ENTITY = [
-        'title', 'description'
-    ];
-    public const REQUIRED_ELEMENTS_TO_CREATE_ENTITY = [
-        'title',
-    ];
+    public static function elementsToCreate(): array
+    {
+        return [
+            'all' => ['title', 'description'],
+            'required' => ['title'],
+            'unrequired' => ['description'],
+        ];
+    }
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -104,10 +105,5 @@ class Specialty implements JsonSerializable, Entity
             'Title' => $title,
             'Description' => $description,
         ];
-    }
-
-    public function jsonSerialize(): mixed
-    {
-        return $this->view();
     }
 }

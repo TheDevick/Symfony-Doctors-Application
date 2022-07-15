@@ -4,14 +4,17 @@ namespace App\Entity;
 
 use App\Repository\DoctorRepository;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: DoctorRepository::class)]
-class Doctor implements JsonSerializable, Entity
+class Doctor extends Entity
 {
-    public const ELEMENTS_TO_CREATE_ENTITY = [
-        'subscription', 'area', 'name', 'specialty',
-    ];
+    public static function elementsToCreate(): array
+    {
+        return [
+            'all' => ['subscription', 'area', 'name', 'specialty'],
+            'required' => ['subscription', 'area', 'name', 'specialty'],
+        ];
+    }
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -99,10 +102,5 @@ class Doctor implements JsonSerializable, Entity
             'Subscription' => $subscription,
             'SpecialtyId' => $specialtyId,
         ];
-    }
-
-    public function jsonSerialize(): mixed
-    {
-        return $this->view();
     }
 }
