@@ -22,6 +22,7 @@ class DoctorFactory extends Factory
             'subscription' => self::faker()->randomNumber(),
             'area' => self::faker()->countryCode(),
             'name' => self::faker()->name(),
+            'specialty' => SpecialtyFactory::random()
         ];
 
         return $defaults;
