@@ -43,11 +43,30 @@ abstract class BaseController extends AbstractController
         return $entities;
     }
 
-    public function index(Request $request): JsonResponse
+    private function viewIndex()
     {
+        $request = CustomRequest::createRequest();
+        $extractor = $request->extractor;
+
+        $limit = $extractor->extractLimit();
+        $page = $extractor->extractPage();
+
         $entities = $this->getAllEntities();
 
-        return new JsonResponse($entities);
+        $view = [
+            "current_page" => $page,
+            "per_page" => $limit,
+            "data" => $entities
+        ];
+
+        return $view;
+    }
+
+    public function index(Request $request): JsonResponse
+    {
+        $view = $this->viewIndex();
+
+        return new JsonResponse($view);
     }
 
     public function store(Request $request): JsonResponse
