@@ -11,6 +11,7 @@ use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class DoctorController extends BaseController
 {
@@ -48,50 +49,6 @@ class DoctorController extends BaseController
         return true;
     }
 
-    private function setSpecialtyById(Doctor $doctor, int $specialtyId)
-    {
-        $specialty = $this->specialtyRepository->find($specialtyId);
-
-        if (is_null($specialty)) {
-            return false;
-        }
-
-        $doctor->setSpecialty($specialty);
-
-        return $doctor;
-    }
-
-    private function setDoctorRequiredElements(Doctor $doctor, array $values): Doctor|false
-    {
-        $doctor->setName($values['Name']);
-        $doctor->setArea($values['Area']);
-        $doctor->setSubscription($values['Subscription']);
-
-        $setSpecialty = $this->setSpecialtyById($doctor, $values['Specialty']);
-
-        if (!$setSpecialty) {
-            return false;
-        }
-
-        $this->specialtyRepository->flush();
-
-        return $doctor;
-    }
-
-    private function setDoctorElements(Doctor $doctor, array $values): Doctor
-    {
-        $setRequired = $this->setDoctorRequiredElements($doctor, $values);
-
-        if (!$setRequired) {
-            throw new JsonNotFoundException('Specialty');
-        }
-
-        // Here, we don't have to set Values to unrequired elements
-        // because Doctor Entity doesn't have unrequired elements
-
-        return $doctor;
-    }
-
     private function getDoctorElements(CustomRequest $request): array
     {
         $body = $request->getBody();
@@ -122,12 +79,38 @@ class DoctorController extends BaseController
         return $doctor;
     }
 
+    private function setDoctorValues(Doctor $doctor, array $values)
+    {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        foreach ($values as $key => $value) {
+            $propertyAccessor->setValue($doctor, $key, $value);
+        }
+    }
+
+    private function updateDoctorValues(Doctor $currentDoctor, Doctor $newDoctor)
+    {
+        $newValues = [
+            'name' => $newDoctor->getName(),
+            'area' => $newDoctor->getArea(),
+            'subscription' => $newDoctor->getSubscription(),
+            'specialty' => $newDoctor->getSpecialty(),
+        ];
+
+        $this->setDoctorValues($currentDoctor, $newValues);
+
+        $this->doctorRepository->flush();
+    }
+
     public function updateEntityObject(Entity $entity, CustomRequest $request): Entity
     {
-        $body = $request->getBody();
+        $elements = $this->getDoctorElements($request);
 
-        $doctor = $this->setDoctorElements($entity, $body);
+        /** @var Doctor $newEntity */
+        $newEntity = DoctorFactory::new()->withoutPersisting()->createOne($elements)->object();
 
-        return $doctor;
+        $this->updateDoctorValues($entity, $newEntity);
+
+        return $entity;
     }
 }
