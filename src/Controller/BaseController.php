@@ -25,39 +25,13 @@ abstract class BaseController extends AbstractController
 
     abstract protected function checkEntityOnRequest(CustomRequest $request): bool;
 
-    private function getSortOnRequest(CustomRequest $request, array $default = null)
-    {
-        if (is_null($default)) {
-            $default = ['id' => 'ASC'];
-        }
-
-        $sortParameter = $request->getParameterBody('Sort', $default);
-
-        if (is_array($sortParameter)) {
-            return array_change_key_case($sortParameter, CASE_LOWER);
-        }
-
-        return $default;
-    }
-
-    private function getFilterOnRequest(CustomRequest $request): array
-    {
-        $filterParameter = $request->getParameterBody('Filter', false);
-
-        if (is_array($filterParameter)) {
-            return array_change_key_case($filterParameter, CASE_LOWER);
-        }
-
-        return [];
-    }
-
     public function index(Request $request): JsonResponse
     {
         $request = CustomRequest::createRequest();
 
-        $sort = $this->getSortOnRequest($request);
+        $sort = $request->extractor->extractSort();
 
-        $filter = $this->getFilterOnRequest($request);
+        $filter = $request->extractor->extractFilter();
 
         $entities = $this->repository->findBy($filter, $sort);
 
