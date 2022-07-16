@@ -41,6 +41,12 @@ class LoginController extends AbstractController
             return new JsonResponse($message, $statusCode);
         }
 
+        $user = $this->userRepository->findOneBy(['email' => $email]);
+
+        if (is_null($user)) {
+            return $this->emailOrPasswordIncorrect();
+        }
+
         return new JsonResponse(['Success' => 'Login is Correct']);
     }
 }
