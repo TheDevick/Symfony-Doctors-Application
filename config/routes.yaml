@@ -24,7 +24,7 @@ doctors.update:
     controller: App\Controller\DoctorController::update
     methods: PUT
     requirements:
-        id: '[0-9]'
+        id: '[0-9]*'
 
 doctors.destroy:
     path: /doctors/{id}
@@ -56,7 +56,7 @@ specialties.update:
     controller: App\Controller\SpecialtyController::update
     methods: PUT
     requirements:
-        id: '[0-9]'
+        id: '[0-9]*'
 
 specialties.destroy:
     path: /specialties/{id}
