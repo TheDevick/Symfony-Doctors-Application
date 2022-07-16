@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Entity;
 use App\Entity\Specialty;
+use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
@@ -72,13 +73,24 @@ class SpecialtyController extends BaseController
         return $specialty;
     }
 
-    protected function createEntityObject(CustomRequest $request): Specialty
+    private function getSpecialtyElements(CustomRequest $request): array
     {
-        $entity = new Specialty();
-
         $body = $request->getBody();
 
-        $specialty = $this->setSpecialtyElements($entity, $body);
+        $elements = [
+            'title' => $body['Title'],
+            'description' => $body['Description'] ?? null,
+        ];
+
+        return $elements;
+    }
+
+    protected function createEntityObject(CustomRequest $request): Specialty
+    {
+        $elements = $this->getSpecialtyElements($request);
+
+        /** @var Specialty $specialty */
+        $specialty = SpecialtyFactory::createOne($elements)->object();
 
         return $specialty;
     }
