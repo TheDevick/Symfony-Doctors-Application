@@ -25,21 +25,27 @@ abstract class BaseController extends AbstractController
 
     abstract protected function checkEntityOnRequest(CustomRequest $request): bool;
 
-    public function index(Request $request): JsonResponse
+    private function getAllEntities()
     {
         $request = CustomRequest::createRequest();
 
-        $sort = $request->extractor->extractSort();
+        $extractor = $request->extractor;
 
-        $filter = $request->extractor->extractFilter();
-
-        $limit = $request->extractor->extractLimit();
-
-        $page = $request->extractor->extractPage();
+        $filter = $extractor->extractFilter();
+        $sort = $extractor->extractSort();
+        $limit = $extractor->extractLimit();
+        $page = $extractor->extractPage();
 
         $offset = ($page - 1) * $limit;
 
         $entities = $this->repository->findBy($filter, $sort, $limit, $offset);
+
+        return $entities;
+    }
+
+    public function index(Request $request): JsonResponse
+    {
+        $entities = $this->getAllEntities();
 
         return new JsonResponse($entities);
     }
