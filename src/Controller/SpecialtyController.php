@@ -56,7 +56,7 @@ class SpecialtyController extends BaseController
 
     private function setSpecialtyUnrequiredElements(Specialty $specialty, array $values): Specialty
     {
-        if (in_array('Description', $values)) {
+        if (array_key_exists('Description', $values)) {
             $description = $values['Description'];
             $specialty->setDescription($description);
         }
