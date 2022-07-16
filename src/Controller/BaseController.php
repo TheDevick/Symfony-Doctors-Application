@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Entity;
+use App\Exception\JsonNoContentException;
+use App\Exception\JsonNotFoundException;
 use App\Repository\Repository;
 use App\Request\Request as CustomRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,6 +54,10 @@ abstract class BaseController extends AbstractController
         $page = $extractor->extractPage();
 
         $entities = $this->getAllEntities();
+
+        if (empty($entities)) {
+            throw new JsonNotFoundException('Resource');
+        }
 
         $view = [
             'current_page' => $page,
