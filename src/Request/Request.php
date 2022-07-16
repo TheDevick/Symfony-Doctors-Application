@@ -6,12 +6,18 @@ use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class Request extends HttpFoundationRequest
 {
+    public readonly RequestExtractor $extractor;
+
     /**
      * Create Custom Request Object.
      */
     public static function createRequest(): Request
     {
-        return Request::createFromGlobals();
+        $request = Request::createFromGlobals();
+
+        $request->extractor = new RequestExtractor($request);
+
+        return $request;
     }
 
     /**
