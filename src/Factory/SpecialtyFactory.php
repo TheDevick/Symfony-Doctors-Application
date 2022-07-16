@@ -6,6 +6,11 @@ use App\Entity\Specialty;
 
 class SpecialtyFactory extends Factory
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected static function getClass(): string
     {
         return Specialty::class;
@@ -13,11 +18,11 @@ class SpecialtyFactory extends Factory
 
     protected function getDefaults(): array
     {
-        return [];
-    }
+        $defaults = [
+            'title' => self::faker()->jobTitle(),
+            'description' => self::faker()->text(20)
+        ];
 
-    public function updateEntity()
-    {
-        echo 'Refatoring...';
+        return $defaults;
     }
 }
