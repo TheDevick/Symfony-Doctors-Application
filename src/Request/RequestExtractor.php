@@ -45,4 +45,21 @@ class RequestExtractor
 
         return $page;
     }
+
+    public function extractLimit(int $limitOfLimit = 50, $default = 5): int
+    {
+        $limit = $this->request->query->get('limit');
+
+        if(is_null($limit)) {
+            $limit = $default;
+        }
+
+        $limit = (int) $limit;
+
+        if($limit > $limitOfLimit) {
+            $limit = $limitOfLimit;
+        }
+
+        return $limit;
+    }
 }
