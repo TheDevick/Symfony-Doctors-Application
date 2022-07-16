@@ -40,13 +40,26 @@ abstract class BaseController extends AbstractController
         return $default;
     }
 
+    private function getFilterOnRequest(CustomRequest $request): array
+    {
+        $filterParameter = $request->getParameterBody('Filter', false);
+
+        if (is_array($filterParameter)) {
+            return array_change_key_case($filterParameter, CASE_LOWER);
+        }
+
+        return [];
+    }
+
     public function index(Request $request): JsonResponse
     {
         $request = CustomRequest::createRequest();
 
         $sort = $this->getSortOnRequest($request);
 
-        $entities = $this->repository->findBy([], $sort);
+        $filter = $this->getFilterOnRequest($request);
+
+        $entities = $this->repository->findBy($filter, $sort);
 
         return new JsonResponse($entities);
     }
