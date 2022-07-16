@@ -34,4 +34,15 @@ class RequestExtractor
 
         return [];
     }
+
+    public function extractPage(int $default = 1): int
+    {
+        $page = $this->request->query->get('page');
+
+        if(is_null($page)) {
+            $page = $default;
+        }
+
+        return $page;
+    }
 }
