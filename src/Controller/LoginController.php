@@ -47,6 +47,12 @@ class LoginController extends AbstractController
             return $this->emailOrPasswordIncorrect();
         }
 
+        $passwordIsValid = $this->passwordHasher->isPasswordValid($user, $password);
+
+        if (!$passwordIsValid) {
+            return $this->emailOrPasswordIncorrect();
+        }
+
         return new JsonResponse(['Success' => 'Login is Correct']);
     }
 }
