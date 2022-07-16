@@ -107,12 +107,17 @@ class Specialty extends Entity
         ];
 
         if ($showRelations) {
-            $specialtyRelation = [
+            $doctorRelation = [
                 'rel' => 'Doctors',
-                'path' => "/specialties/$id/doctors"
+                'path' => "/specialties/$id/doctors",
             ];
 
-            $view["_links"] = $specialtyRelation;
+            $selfRelation = [
+                'rel' => 'self',
+                'path' => "/specialties/$id",
+            ];
+
+            $view['_links'] = [$doctorRelation, $selfRelation];
         }
 
         return $view;
