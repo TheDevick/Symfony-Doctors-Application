@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Doctor;
 use App\Entity\Entity;
 use App\Exception\JsonNotFoundException;
-use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
@@ -16,10 +15,9 @@ class DoctorController extends BaseController
 {
     public function __construct(
         private SpecialtyRepository $specialtyRepository,
-        private DoctorRepository $doctorRepository,
-        private DoctorFactory $doctorFactory
+        private DoctorRepository $doctorRepository
     ) {
-        parent::__construct($doctorRepository, $doctorFactory);
+        parent::__construct($doctorRepository);
     }
 
     protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse

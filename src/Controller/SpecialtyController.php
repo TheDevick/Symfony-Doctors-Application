@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Entity;
 use App\Entity\Specialty;
-use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
@@ -17,9 +16,8 @@ class SpecialtyController extends BaseController
     public function __construct(
         private DoctorRepository $doctorRepository,
         private SpecialtyRepository $specialtyRepository,
-        private SpecialtyFactory $specialtyFactory
     ) {
-        parent::__construct($specialtyRepository, $specialtyFactory);
+        parent::__construct($specialtyRepository);
     }
 
     protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse

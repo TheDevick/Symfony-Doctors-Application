@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Entity;
-use App\Factory\Factory;
 use App\Repository\Repository;
 use App\Request\Request as CustomRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,8 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class BaseController extends AbstractController
 {
     public function __construct(
-        private Repository $repository,
-        private Factory $factory
+        private Repository $repository
     ) {
     }
 
