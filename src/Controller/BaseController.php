@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Entity;
-use App\Exception\JsonNoContentException;
 use App\Exception\JsonNotFoundException;
 use App\Repository\Repository;
 use App\Request\Request as CustomRequest;

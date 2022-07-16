@@ -2,7 +2,6 @@
 
 namespace App\EventSubscriber;
 
-use App\Exception\JsonNoContentException;
 use App\Exception\JsonNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

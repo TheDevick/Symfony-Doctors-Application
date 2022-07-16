@@ -87,7 +87,7 @@ class Doctor extends Entity
         return $this;
     }
 
-    public function view(): array
+    public function view(bool $showRelations = true): array
     {
         $id = $this->getId() ?? null;
         $name = $this->getName() ?? null;
@@ -95,12 +95,23 @@ class Doctor extends Entity
         $subscription = $this->getSubscription() ?? null;
         $specialtyId = $this->getSpecialty()->getId() ?? null;
 
-        return [
+        $view = [
             'Id' => $id,
             'Name' => $name,
             'Area' => $area,
             'Subscription' => $subscription,
             'SpecialtyId' => $specialtyId,
         ];
+
+        if ($showRelations) {
+            $specialtyRelation = [
+                'rel' => 'Specialty',
+                'path' => Rpute,
+            ];
+
+            $view['_links'] = [$specialtyRelation];
+        }
+
+        return $view;
     }
 }
