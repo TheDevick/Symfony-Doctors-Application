@@ -33,7 +33,13 @@ abstract class BaseController extends AbstractController
 
         $filter = $request->extractor->extractFilter();
 
-        $entities = $this->repository->findBy($filter, $sort);
+        $limit = $request->extractor->extractLimit();
+
+        $page = $request->extractor->extractPage();
+
+        $offset = ($page - 1) * $limit;
+
+        $entities = $this->repository->findBy($filter, $sort, $limit, $offset);
 
         return new JsonResponse($entities);
     }
