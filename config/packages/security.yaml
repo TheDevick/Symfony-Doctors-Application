@@ -1,4 +1,5 @@
 security:
+    enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -10,6 +11,13 @@ security:
                 class: App\Entity\User
                 property: email
     firewalls:
+        login:
+            pattern: ^/login
+            stateless: true
+            json_login:
+                check_path: /login
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false

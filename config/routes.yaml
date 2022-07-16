@@ -64,3 +64,6 @@ specialties.destroy:
     methods: DELETE
     requirements:
         id: '[0-9]*'
+
+application.login:
+    path: /login
