@@ -20,7 +20,7 @@ class SpecialtyFactory extends Factory
     {
         $defaults = [
             'title' => self::faker()->jobTitle(),
-            'description' => self::faker()->text(20)
+            'description' => self::faker()->text(20),
         ];
 
         return $defaults;
