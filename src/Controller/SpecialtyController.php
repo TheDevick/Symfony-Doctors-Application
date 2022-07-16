@@ -88,13 +88,4 @@ class SpecialtyController extends BaseController
 
         return new JsonResponse($doctors);
     }
-
-    // Never Used
-    protected function onCreateEntityError(): JsonResponse
-    {
-        $message = ['Error' => 'Doctor not Found'];
-        $statusCode = Response::HTTP_NOT_FOUND;
-
-        return new JsonResponse($message, $statusCode);
-    }
 }

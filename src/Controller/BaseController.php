@@ -21,11 +21,9 @@ abstract class BaseController extends AbstractController
 
     abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
 
-    abstract protected function createEntityObject(CustomRequest $request): Entity|false;
+    abstract protected function createEntityObject(CustomRequest $request): Entity;
 
     abstract protected function checkStore(CustomRequest $request): bool;
-
-    abstract protected function onCreateEntityError(): JsonResponse;
 
     private function getSortOnRequest(CustomRequest $request, array $default = null)
     {
@@ -67,10 +65,6 @@ abstract class BaseController extends AbstractController
         }
 
         $entity = $this->createEntityObject($request);
-
-        if (!$entity) {
-            return $this->onCreateEntityError();
-        }
 
         $this->repository->add($entity, true);
 

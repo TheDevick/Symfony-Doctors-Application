@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Doctor;
+use App\Exception\JsonNotFoundException;
 use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
@@ -77,7 +78,7 @@ class DoctorController extends BaseController
         return $doctor;
     }
 
-    protected function createEntityObject(CustomRequest $request): Doctor|false
+    protected function createEntityObject(CustomRequest $request): Doctor
     {
         $doctor = new Doctor();
 
@@ -86,20 +87,12 @@ class DoctorController extends BaseController
         $setRequired = $this->setDoctorRequiredElements($doctor, $body);
 
         if (!$setRequired) {
-            return false;
+            throw new JsonNotFoundException('Specilaty');
         }
 
         // Here, we don't have to set Values to unrequired elements
         // because Doctor Entity doesn't have unrequired elements
 
         return $doctor;
-    }
-
-    protected function onCreateEntityError(): JsonResponse
-    {
-        $message = ['Error' => 'Specialty not Found'];
-        $statusCode = Response::HTTP_NOT_FOUND;
-
-        return new JsonResponse($message, $statusCode);
     }
 }
