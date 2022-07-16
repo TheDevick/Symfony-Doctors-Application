@@ -94,16 +94,27 @@ class Specialty extends Entity
         return $this;
     }
 
-    public function view(): array
+    public function view(bool $showRelations = true): array
     {
         $id = $this->getId() ?? null;
         $title = $this->getTitle() ?? null;
         $description = $this->getDescription() ?? null;
 
-        return [
+        $view = [
             'Id' => $id,
             'Title' => $title,
             'Description' => $description,
         ];
+
+        if ($showRelations) {
+            $specialtyRelation = [
+                'rel' => 'Doctors',
+                'path' => "/specialties/$id/doctors"
+            ];
+
+            $view["_links"] = $specialtyRelation;
+        }
+
+        return $view;
     }
 }

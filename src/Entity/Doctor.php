@@ -103,6 +103,15 @@ class Doctor extends Entity
             'SpecialtyId' => $specialtyId,
         ];
 
+        if ($showRelations) {
+            $specialtyRelation = [
+                'rel' => 'Specialty',
+                'path' => "/specialties/$specialtyId"
+            ];
+
+            $view['_links'] = [$specialtyRelation];
+        }
+
         return $view;
     }
 }

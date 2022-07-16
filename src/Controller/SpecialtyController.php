@@ -111,7 +111,11 @@ class SpecialtyController extends BaseController
         if (empty($doctors)) {
             return $this->jsonResponseNotFound();
         }
+        
+        foreach ($doctors as $doctor) {
+            $view[] = $doctor->view(false);
+        }
 
-        return new JsonResponse($doctors);
+        return new JsonResponse($view);
     }
 }
