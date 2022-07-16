@@ -20,12 +20,12 @@ class UserFactory extends Factory
 
     protected function getDefaults(): array
     {
-        $email = self::faker()->email();
+        $userName = self::faker()->userName();
         $roles = [];
         $plainPassword = self::faker()->password();
 
         $defaults = [
-            'email' => $email,
+            'userName' => $userName,
             'roles' => $roles,
             'password' => $plainPassword,
         ];

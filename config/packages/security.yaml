@@ -9,7 +9,8 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: username
+        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         login:
             pattern: ^/login

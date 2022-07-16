@@ -17,7 +17,7 @@ class AppFixtures extends Fixture
         UserFactory::createMany(5);
         UserFactory::createOne([
             'password' => '123456',
-            'email' => 'default@user.com',
+            'username' => 'Default User',
         ]);
     }
 }
