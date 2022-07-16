@@ -17,7 +17,7 @@ doctors.show:
     controller: App\Controller\DoctorController::show
     methods: GET
     requirements:
-        id: '[0-9]'
+        id: '[0-9]*'
 
 doctors.update:
     path: /doctors/{id}
@@ -31,7 +31,7 @@ doctors.destroy:
     controller: App\Controller\DoctorController::destroy
     methods: DELETE
     requirements:
-        id: '[0-9]'
+        id: '[0-9]*'
 
 
 specialties.index:
@@ -49,7 +49,7 @@ specialties.show:
     controller: App\Controller\SpecialtyController::show
     methods: GET
     requirements:
-        id: '[0-9]'
+        id: '[0-9]*'
 
 specialties.update:
     path: /specialties/{id}
@@ -63,4 +63,4 @@ specialties.destroy:
     controller: App\Controller\SpecialtyController::destroy
     methods: DELETE
     requirements:
-        id: '[0-9]'
+        id: '[0-9]*'
