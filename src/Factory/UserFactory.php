@@ -3,11 +3,13 @@
 namespace App\Factory;
 
 use App\Entity\User;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFactory extends Factory
 {
-    public function __construct()
-    {
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher
+    ) {
         parent::__construct();
     }
 
@@ -18,12 +20,26 @@ class UserFactory extends Factory
 
     protected function getDefaults(): array
     {
+        $email = self::faker()->email();
+        $roles = [];
+        $plainPassword = self::faker()->password();
+
         $defaults = [
-            'email' => self::faker()->email(),
-            'roles' => [],
-            'password' => self::faker()->password(),
+            'email' => $email,
+            'roles' => $roles,
+            'password' => $plainPassword,
         ];
 
         return $defaults;
+    }
+
+    protected function initialize(): self
+    {
+        return $this->afterInstantiate(function (User $user) {
+            $plainPassword = $user->getPassword();
+            $passwordHash = $this->passwordHasher->hashPassword($user, $plainPassword);
+
+            $user->setPassword($passwordHash);
+        });
     }
 }
