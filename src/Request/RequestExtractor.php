@@ -39,7 +39,7 @@ class RequestExtractor
     {
         $page = $this->request->query->get('page');
 
-        if(is_null($page)) {
+        if (is_null($page)) {
             $page = $default;
         }
 
@@ -50,13 +50,13 @@ class RequestExtractor
     {
         $limit = $this->request->query->get('limit');
 
-        if(is_null($limit)) {
+        if (is_null($limit)) {
             $limit = $default;
         }
 
         $limit = (int) $limit;
 
-        if($limit > $limitOfLimit) {
+        if ($limit > $limitOfLimit) {
             $limit = $limitOfLimit;
         }
 

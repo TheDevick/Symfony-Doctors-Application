@@ -54,9 +54,9 @@ abstract class BaseController extends AbstractController
         $entities = $this->getAllEntities();
 
         $view = [
-            "current_page" => $page,
-            "per_page" => $limit,
-            "data" => $entities
+            'current_page' => $page,
+            'per_page' => $limit,
+            'data' => $entities,
         ];
 
         return $view;
