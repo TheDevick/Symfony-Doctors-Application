@@ -10,6 +10,7 @@ use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SpecialtyController extends BaseController
@@ -47,32 +48,6 @@ class SpecialtyController extends BaseController
         return true;
     }
 
-    private function setSpecialtyRequiredElements(Specialty $specialty, array $values): Specialty
-    {
-        $specialty->setTitle($values['Title']);
-
-        return $specialty;
-    }
-
-    private function setSpecialtyUnrequiredElements(Specialty $specialty, array $values): Specialty
-    {
-        if (array_key_exists('Description', $values)) {
-            $description = $values['Description'];
-            $specialty->setDescription($description);
-        }
-
-        return $specialty;
-    }
-
-    private function setSpecialtyElements(Specialty $specialty, array $values): Specialty
-    {
-        $this->setSpecialtyRequiredElements($specialty, $values);
-
-        $this->setSpecialtyUnrequiredElements($specialty, $values);
-
-        return $specialty;
-    }
-
     private function getSpecialtyElements(CustomRequest $request): array
     {
         $body = $request->getBody();
@@ -95,13 +70,37 @@ class SpecialtyController extends BaseController
         return $specialty;
     }
 
+    private function setSpecialtyValues(Specialty $specialty, array $values)
+    {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        foreach ($values as $key => $value) {
+            $propertyAccessor->setValue($specialty, $key, $value);
+        }
+    }
+
+    private function updateSpecialtyValues(Specialty $currentSpecialty, Specialty $newSpecialty)
+    {
+        $newValues = [
+            'title' => $newSpecialty->getTitle(),
+            'description' => $newSpecialty->getDescription(),
+        ];
+
+        $this->setSpecialtyValues($currentSpecialty, $newValues);
+
+        $this->specialtyRepository->flush();
+    }
+
     public function updateEntityObject(Entity $entity, CustomRequest $request): Entity
     {
-        $body = $request->getBody();
+        $elements = $this->getSpecialtyElements($request);
 
-        $specialty = $this->setSpecialtyElements($entity, $body);
+        /** @var Specialty $newEntity */
+        $newEntity = SpecialtyFactory::new()->withoutPersisting()->createOne($elements)->object();
 
-        return $specialty;
+        $this->updateSpecialtyValues($entity, $newEntity);
+
+        return $entity;
     }
 
     #[Route(path: '/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]
