@@ -126,36 +126,4 @@ abstract class BaseController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
-
-    // protected function checkFilters($filters)
-    // {
-    //     if (!is_array($filters)) {
-    //         return false;
-    //     }
-
-    //     foreach ($filters as $key => $filter) {
-    //         $filterExistsOnEntityElements = in_array($key, $this->getEntityElements());
-
-    //         if (!$filterExistsOnEntityElements) {
-    //             return false;
-    //         }
-    //     }
-
-    //     return true;
-    // }
-
-    // protected function getFiltersOnRequest(Request $request, bool $lowerCase = true): array
-    // {
-    //     $filters = $this->getParameterInBody($request, 'Filter');
-
-    //     if (is_null($filters) || !$this->checkFilters($filters)) {
-    //         return [];
-    //     }
-
-    //     if ($lowerCase) {
-    //         $filters = $this->arrayKeysToLowerCase($filters);
-    //     }
-
-    //     return $filters;
-    // }
 }
