@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Doctor;
+use App\Entity\Entity;
 use App\Exception\JsonNotFoundException;
 use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
@@ -32,7 +33,7 @@ class DoctorController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    protected function checkStore(CustomRequest $request): bool
+    protected function checkEntityOnRequest(CustomRequest $request): bool
     {
         $request->getBody();
 
@@ -78,20 +79,36 @@ class DoctorController extends BaseController
         return $doctor;
     }
 
-    protected function createEntityObject(CustomRequest $request): Doctor
+    private function setDoctorElements(Doctor $doctor, array $values): Doctor
     {
-        $doctor = new Doctor();
-
-        $body = $request->getBody();
-
-        $setRequired = $this->setDoctorRequiredElements($doctor, $body);
+        $setRequired = $this->setDoctorRequiredElements($doctor, $values);
 
         if (!$setRequired) {
-            throw new JsonNotFoundException('Specilaty');
+            throw new JsonNotFoundException('Specialty');
         }
 
         // Here, we don't have to set Values to unrequired elements
         // because Doctor Entity doesn't have unrequired elements
+
+        return $doctor;
+    }
+
+    protected function createEntityObject(CustomRequest $request): Doctor
+    {
+        $entity = new Doctor();
+
+        $body = $request->getBody();
+
+        $doctor = $this->setDoctorElements($entity, $body);
+
+        return $doctor;
+    }
+
+    public function updateEntityObject(Entity $entity, CustomRequest $request): Entity
+    {
+        $body = $request->getBody();
+
+        $doctor = $this->setDoctorElements($entity, $body);
 
         return $doctor;
     }

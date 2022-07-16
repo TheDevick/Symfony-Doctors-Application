@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Entity;
 use App\Entity\Specialty;
 use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
@@ -32,7 +33,7 @@ class SpecialtyController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    protected function checkStore(CustomRequest $request): bool
+    protected function checkEntityOnRequest(CustomRequest $request): bool
     {
         $elementsTocreate = Specialty::elementsToCreate()['required'];
         $body = $request->getBody();
@@ -64,15 +65,31 @@ class SpecialtyController extends BaseController
         return $specialty;
     }
 
+    private function setSpecialtyElements(Specialty $specialty, array $values): Specialty
+    {
+        $this->setSpecialtyRequiredElements($specialty, $values);
+
+        $this->setSpecialtyUnrequiredElements($specialty, $values);
+
+        return $specialty;
+    }
+
     protected function createEntityObject(CustomRequest $request): Specialty
     {
-        $specialty = new Specialty();
+        $entity = new Specialty();
 
         $body = $request->getBody();
 
-        $this->setSpecialtyRequiredElements($specialty, $body);
+        $specialty = $this->setSpecialtyElements($entity, $body);
 
-        $this->setSpecialtyUnrequiredElements($specialty, $body);
+        return $specialty;
+    }
+
+    public function updateEntityObject(Entity $entity, CustomRequest $request): Entity
+    {
+        $body = $request->getBody();
+
+        $specialty = $this->setSpecialtyElements($entity, $body);
 
         return $specialty;
     }

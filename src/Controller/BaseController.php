@@ -23,7 +23,9 @@ abstract class BaseController extends AbstractController
 
     abstract protected function createEntityObject(CustomRequest $request): Entity;
 
-    abstract protected function checkStore(CustomRequest $request): bool;
+    abstract protected function updateEntityObject(Entity $entity, CustomRequest $request): Entity;
+
+    abstract protected function checkEntityOnRequest(CustomRequest $request): bool;
 
     private function getSortOnRequest(CustomRequest $request, array $default = null)
     {
@@ -68,9 +70,9 @@ abstract class BaseController extends AbstractController
     {
         $request = CustomRequest::createRequest();
 
-        $checkStore = $this->checkStore($request);
+        $checkEntityOnRequest = $this->checkEntityOnRequest($request);
 
-        if (!$checkStore) {
+        if (!$checkEntityOnRequest) {
             $message = ['Error' => 'This Resource is Missing Parameters'];
             $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
 
@@ -97,19 +99,24 @@ abstract class BaseController extends AbstractController
 
     public function update(Request $request, int $id): JsonResponse
     {
+        $request = CustomRequest::createRequest();
+
+        $checkEntityOnRequest = $this->checkEntityOnRequest($request);
+
+        if (!$checkEntityOnRequest) {
+            $message = ['Error' => 'This Resource is Missing Parameters'];
+            $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+
+            return new JsonResponse($message, $statusCode);
+        }
+
         $entityFounded = $this->repository->find($id);
 
         if (is_null($entityFounded)) {
             return $this->jsonResponseNotFound();
         }
 
-        $data = $request->toArray();
-
-        $entityUpdated = $this->factory->updateEntity($entityFounded, $data);
-
-        if (false == $entityUpdated) {
-            return $this->jsonResponseNotFound(false);
-        }
+        $entityUpdated = $this->updateEntityObject($entityFounded, $request);
 
         return new JsonResponse($entityUpdated);
     }
