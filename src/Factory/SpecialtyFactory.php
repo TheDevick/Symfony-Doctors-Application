@@ -16,11 +16,6 @@ class SpecialtyFactory extends Factory
         return [];
     }
 
-    public function createEntity()
-    {
-        echo 'Refatoring...';
-    }
-
     public function updateEntity()
     {
         echo 'Refatoring...';
