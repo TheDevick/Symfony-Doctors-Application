@@ -11,7 +11,6 @@ use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
 
