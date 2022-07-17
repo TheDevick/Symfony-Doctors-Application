@@ -96,7 +96,7 @@ class SpecialtyController extends BaseController
         return $entity;
     }
 
-    #[Route(path: '/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]
+    #[Route(path: '/api/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]
     public function showDoctors(int $id)
     {
         $doctors = $this->doctorRepository->findBy(['specialty' => $id]);
