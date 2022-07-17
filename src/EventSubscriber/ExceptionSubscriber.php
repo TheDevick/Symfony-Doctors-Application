@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Throwable;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -20,11 +19,12 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ];
     }
 
-    private function onJsonNotFoundException(Throwable $throwable): JsonResponse
+    private function onJsonNotFoundException(): JsonResponse
     {
-        $resource = $throwable->getMessage();
+        $message = ['Error' => 'Resource Not Found'];
+        $statusCode = Response::HTTP_NOT_FOUND;
 
-        $response = new JsonResponse(['Error' => "Resource Not Found"], Response::HTTP_NOT_FOUND);
+        $response = new JsonResponse($message, $statusCode);
 
         return $response;
     }
@@ -34,7 +34,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $message = ['Error' => 'This Resource is Missing Parameters'];
         $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
 
-        return new JsonResponse($message, $statusCode);
+        $response = new JsonResponse($message, $statusCode);
+
+        return $response;
     }
 
     public function onKernelException(ExceptionEvent $event): void
@@ -42,7 +44,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $throwable = $event->getThrowable();
 
         if ($throwable instanceof JsonNotFoundException) {
-            $response = $this->onJsonNotFoundException($throwable);
+            $response = $this->onJsonNotFoundException();
             $event->setResponse($response);
         }
 
