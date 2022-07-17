@@ -10,15 +10,17 @@ use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class DoctorController extends BaseController
 {
     public function __construct(
         private SpecialtyRepository $specialtyRepository,
-        private DoctorRepository $doctorRepository
+        private DoctorRepository $doctorRepository,
+        private CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($doctorRepository);
+        parent::__construct($doctorRepository, $cacheItemPoolInterface);
     }
 
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
@@ -102,5 +104,10 @@ class DoctorController extends BaseController
         $this->updateDoctorValues($entity, $newEntity);
 
         return $entity;
+    }
+
+    protected function cachePrefix(): string
+    {
+        return 'doctor';
     }
 }

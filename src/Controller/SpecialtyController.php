@@ -10,6 +10,7 @@ use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,8 +20,9 @@ class SpecialtyController extends BaseController
     public function __construct(
         private DoctorRepository $doctorRepository,
         private SpecialtyRepository $specialtyRepository,
+        private CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($specialtyRepository);
+        parent::__construct($specialtyRepository, $cacheItemPoolInterface);
     }
 
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
@@ -94,6 +96,11 @@ class SpecialtyController extends BaseController
         $this->updateSpecialtyValues($entity, $newEntity);
 
         return $entity;
+    }
+
+    protected function cachePrefix(): string
+    {
+        return 'specialty';
     }
 
     #[Route(path: '/api/specialties/{id}/doctors', name: 'specialties.showDoctors', methods: 'GET')]
