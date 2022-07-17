@@ -3,31 +3,31 @@ controllers:
     type: attribute
 
 doctors.index:
-    path: /doctors
+    path: /api/doctors
     controller: App\Controller\DoctorController::index
     methods: GET
 
 doctors.store:
-    path: /doctors
+    path: /api/doctors
     controller: App\Controller\DoctorController::store
     methods: POST
 
 doctors.show:
-    path: /doctors/{id}
+    path: /api/doctors/{id}
     controller: App\Controller\DoctorController::show
     methods: GET
     requirements:
         id: '[0-9]*'
 
 doctors.update:
-    path: /doctors/{id}
+    path: /api/doctors/{id}
     controller: App\Controller\DoctorController::update
     methods: PUT
     requirements:
         id: '[0-9]*'
 
 doctors.destroy:
-    path: /doctors/{id}
+    path: /api/doctors/{id}
     controller: App\Controller\DoctorController::destroy
     methods: DELETE
     requirements:
@@ -35,35 +35,35 @@ doctors.destroy:
 
 
 specialties.index:
-    path: /specialties
+    path: /api/specialties
     controller: App\Controller\SpecialtyController::index
     methods: GET
 
 specialties.store:
-    path: /specialties
+    path: /api/specialties
     controller: App\Controller\SpecialtyController::store
     methods: POST
 
 specialties.show:
-    path: /specialties/{id}
+    path: /api/specialties/{id}
     controller: App\Controller\SpecialtyController::show
     methods: GET
     requirements:
         id: '[0-9]*'
 
 specialties.update:
-    path: /specialties/{id}
+    path: /api/specialties/{id}
     controller: App\Controller\SpecialtyController::update
     methods: PUT
     requirements:
         id: '[0-9]*'
 
 specialties.destroy:
-    path: /specialties/{id}
+    path: /api/specialties/{id}
     controller: App\Controller\SpecialtyController::destroy
     methods: DELETE
     requirements:
         id: '[0-9]*'
 
 application.login:
-    path: /login
+    path: /api/login

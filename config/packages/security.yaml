@@ -13,12 +13,16 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         login:
-            pattern: ^/login
+            pattern: ^/api/login
             stateless: true
             json_login:
-                check_path: /login
+                check_path: /api/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern:   ^/api
+            stateless: true
+            jwt: ~
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -36,12 +40,12 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - {
-            path: ^/doctors,
+            path: ^/api/doctors,
             methods: [POST, PUT, DELETE],
             roles: IS_AUTHENTICATED_FULLY
         }
         - {
-            path: ^/specialties,
+            path: ^/api/specialties,
             methods: [POST, PUT, DELETE],
             roles: IS_AUTHENTICATED_FULLY
         }
