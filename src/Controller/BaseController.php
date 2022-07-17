@@ -18,8 +18,6 @@ abstract class BaseController extends AbstractController
     ) {
     }
 
-    abstract protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse;
-
     abstract protected function createEntityObject(CustomRequest $request): Entity;
 
     abstract protected function updateEntityObject(Entity $entity, CustomRequest $request): Entity;
@@ -92,7 +90,7 @@ abstract class BaseController extends AbstractController
         $entity = $this->repository->find($id);
 
         if (is_null($entity)) {
-            return $this->jsonResponseNotFound();
+            throw new JsonNotFoundException('Resource');
         }
 
         return new JsonResponse($entity);
@@ -107,7 +105,7 @@ abstract class BaseController extends AbstractController
         $entityFounded = $this->repository->find($id);
 
         if (is_null($entityFounded)) {
-            return $this->jsonResponseNotFound();
+            throw new JsonNotFoundException('Resource');
         }
 
         $entityUpdated = $this->updateEntityObject($entityFounded, $request);
@@ -120,7 +118,7 @@ abstract class BaseController extends AbstractController
         $entity = $this->repository->find($id);
 
         if (is_null($entity)) {
-            return $this->jsonResponseNotFound();
+            throw new JsonNotFoundException('Resource');
         }
 
         $this->repository->remove($entity, true);

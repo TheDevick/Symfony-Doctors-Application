@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Entity;
 use App\Entity\Specialty;
+use App\Exception\JsonNotFoundException;
 use App\Exception\JsonUnprocessableEntityException;
 use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
@@ -21,17 +22,6 @@ class SpecialtyController extends BaseController
         private SpecialtyRepository $specialtyRepository,
     ) {
         parent::__construct($specialtyRepository);
-    }
-
-    protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
-    {
-        $entity = $mainEntity ? 'Specialty' : 'Doctor';
-
-        $error = ['Error' => "$entity Not Found"];
-
-        $statusCode = Response::HTTP_NOT_FOUND;
-
-        return new JsonResponse($error, $statusCode);
     }
 
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
@@ -113,7 +103,7 @@ class SpecialtyController extends BaseController
         $doctors = $this->doctorRepository->findBy(['specialty' => $id]);
 
         if (empty($doctors)) {
-            return $this->jsonResponseNotFound();
+            throw new JsonNotFoundException('Resource');
         }
 
         foreach ($doctors as $doctor) {

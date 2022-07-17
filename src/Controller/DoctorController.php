@@ -23,17 +23,6 @@ class DoctorController extends BaseController
         parent::__construct($doctorRepository);
     }
 
-    protected function jsonResponseNotFound(bool $mainEntity = true): JsonResponse
-    {
-        $entity = $mainEntity ? 'Doctor' : 'Specialty';
-
-        $error = ['Error' => "$entity Not Found"];
-
-        $statusCode = Response::HTTP_NOT_FOUND;
-
-        return new JsonResponse($error, $statusCode);
-    }
-
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
     {
         $elementsTocreate = Doctor::elementsToCreate()['required'];
