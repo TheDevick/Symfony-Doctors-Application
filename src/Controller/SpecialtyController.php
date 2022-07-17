@@ -103,7 +103,7 @@ class SpecialtyController extends BaseController
         $doctors = $this->doctorRepository->findBy(['specialty' => $id]);
 
         if (empty($doctors)) {
-            throw new JsonNotFoundException('Resource');
+            throw new JsonNotFoundException();
         }
 
         foreach ($doctors as $doctor) {

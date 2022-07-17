@@ -53,7 +53,7 @@ abstract class BaseController extends AbstractController
         $entities = $this->getAllEntities();
 
         if (empty($entities)) {
-            throw new JsonNotFoundException('Resource');
+            throw new JsonNotFoundException();
         }
 
         $view = [
@@ -90,7 +90,7 @@ abstract class BaseController extends AbstractController
         $entity = $this->repository->find($id);
 
         if (is_null($entity)) {
-            throw new JsonNotFoundException('Resource');
+            throw new JsonNotFoundException();
         }
 
         return new JsonResponse($entity);
@@ -105,7 +105,7 @@ abstract class BaseController extends AbstractController
         $entityFounded = $this->repository->find($id);
 
         if (is_null($entityFounded)) {
-            throw new JsonNotFoundException('Resource');
+            throw new JsonNotFoundException();
         }
 
         $entityUpdated = $this->updateEntityObject($entityFounded, $request);
@@ -118,7 +118,7 @@ abstract class BaseController extends AbstractController
         $entity = $this->repository->find($id);
 
         if (is_null($entity)) {
-            throw new JsonNotFoundException('Resource');
+            throw new JsonNotFoundException();
         }
 
         $this->repository->remove($entity, true);

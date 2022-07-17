@@ -48,7 +48,7 @@ class DoctorController extends BaseController
         $specialty = $this->specialtyRepository->find($body['Specialty']);
 
         if (is_null($specialty)) {
-            throw new JsonNotFoundException('Specialty');
+            throw new JsonNotFoundException();
         }
 
         $elements = [

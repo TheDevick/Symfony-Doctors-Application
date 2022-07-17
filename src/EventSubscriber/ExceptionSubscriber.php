@@ -24,7 +24,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $resource = $throwable->getMessage();
 
-        $response = new JsonResponse(['Error' => "$resource Not Found"], Response::HTTP_NOT_FOUND);
+        $response = new JsonResponse(['Error' => "Resource Not Found"], Response::HTTP_NOT_FOUND);
 
         return $response;
     }
