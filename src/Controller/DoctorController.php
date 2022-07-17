@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Doctor;
 use App\Entity\Entity;
 use App\Exception\JsonNotFoundException;
+use App\Exception\JsonUnprocessableEntityException;
 use App\Factory\DoctorFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
@@ -33,15 +34,17 @@ class DoctorController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    protected function checkEntityOnRequest(CustomRequest $request): bool
+    protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
     {
-        $request->getBody();
-
         $elementsTocreate = Doctor::elementsToCreate()['required'];
 
         foreach ($elementsTocreate as $elementToCreate) {
             $check = $request->checkBodyKeyExists($elementToCreate, 'strtolower');
             if (!$check) {
+                if ($throwException) {
+                    throw new JsonUnprocessableEntityException();
+                }
+
                 return false;
             }
         }

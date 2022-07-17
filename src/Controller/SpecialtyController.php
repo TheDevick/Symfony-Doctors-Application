@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Entity;
 use App\Entity\Specialty;
+use App\Exception\JsonUnprocessableEntityException;
 use App\Factory\SpecialtyFactory;
 use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
@@ -33,14 +34,17 @@ class SpecialtyController extends BaseController
         return new JsonResponse($error, $statusCode);
     }
 
-    protected function checkEntityOnRequest(CustomRequest $request): bool
+    protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
     {
         $elementsTocreate = Specialty::elementsToCreate()['required'];
-        $body = $request->getBody();
 
         foreach ($elementsTocreate as $elementToCreate) {
             $check = $request->checkBodyKeyExists($elementToCreate, 'strtolower');
             if (!$check) {
+                if ($throwException) {
+                    throw new JsonUnprocessableEntityException();
+                }
+
                 return false;
             }
         }

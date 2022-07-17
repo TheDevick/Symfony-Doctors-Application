@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Entity;
 use App\Exception\JsonNotFoundException;
-use App\Exception\JsonUnprocessableEntityException;
 use App\Repository\Repository;
 use App\Request\Request as CustomRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +24,7 @@ abstract class BaseController extends AbstractController
 
     abstract protected function updateEntityObject(Entity $entity, CustomRequest $request): Entity;
 
-    abstract protected function checkEntityOnRequest(CustomRequest $request): bool;
+    abstract protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool;
 
     private function getAllEntities()
     {
@@ -79,11 +78,7 @@ abstract class BaseController extends AbstractController
     {
         $request = CustomRequest::createRequest();
 
-        $checkEntityOnRequest = $this->checkEntityOnRequest($request);
-
-        if (!$checkEntityOnRequest) {
-            throw new JsonUnprocessableEntityException();
-        }
+        $this->checkEntityOnRequest($request);
 
         $entity = $this->createEntityObject($request);
 
@@ -107,11 +102,7 @@ abstract class BaseController extends AbstractController
     {
         $request = CustomRequest::createRequest();
 
-        $checkEntityOnRequest = $this->checkEntityOnRequest($request);
-
-        if (!$checkEntityOnRequest) {
-            throw new JsonUnprocessableEntityException();
-        }
+        $this->checkEntityOnRequest($request);
 
         $entityFounded = $this->repository->find($id);
 
