@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Entity;
 use App\Exception\JsonNotFoundException;
+use App\Exception\JsonUnprocessableEntityException;
 use App\Repository\Repository;
 use App\Request\Request as CustomRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -81,10 +82,7 @@ abstract class BaseController extends AbstractController
         $checkEntityOnRequest = $this->checkEntityOnRequest($request);
 
         if (!$checkEntityOnRequest) {
-            $message = ['Error' => 'This Resource is Missing Parameters'];
-            $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-
-            return new JsonResponse($message, $statusCode);
+            throw new JsonUnprocessableEntityException();
         }
 
         $entity = $this->createEntityObject($request);
@@ -112,10 +110,7 @@ abstract class BaseController extends AbstractController
         $checkEntityOnRequest = $this->checkEntityOnRequest($request);
 
         if (!$checkEntityOnRequest) {
-            $message = ['Error' => 'This Resource is Missing Parameters'];
-            $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-
-            return new JsonResponse($message, $statusCode);
+            throw new JsonUnprocessableEntityException();
         }
 
         $entityFounded = $this->repository->find($id);
