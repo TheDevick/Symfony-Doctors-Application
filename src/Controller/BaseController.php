@@ -118,8 +118,7 @@ abstract class BaseController extends AbstractController
 
         if ($cacheExists) {
             $entity = $this->cacheItemPoolInterface->getItem($cacheTitle)->get();
-        }
-        else {
+        } else {
             $entity = $this->repository->find($id);
 
             if (is_null($entity)) {
@@ -143,6 +142,12 @@ abstract class BaseController extends AbstractController
         }
 
         $entityUpdated = $this->updateEntityObject($entityFounded, $request);
+
+        $cachePrefix = $this->cachePrefix();
+        $cacheTitle = "$cachePrefix.$id";
+        $item = $this->cacheItemPoolInterface->getItem($cacheTitle);
+        $item->set($entityUpdated);
+        $this->cacheItemPoolInterface->save($item);
 
         return new JsonResponse($entityUpdated);
     }
