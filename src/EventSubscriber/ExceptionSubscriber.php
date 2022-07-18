@@ -13,10 +13,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private
-        LoggerInterface $logger
-        )
-    {
+    public function __construct(
+        private LoggerInterface $logger
+    ) {
     }
 
     public static function getSubscribedEvents(): array
@@ -75,7 +74,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         }
 
         $environment = getenv('APP_ENV');
-        
+
         if ('prod' === $environment) {
             $stackTrace = $throwable->getTraceAsString();
             $response = $this->onGenericException($stackTrace);

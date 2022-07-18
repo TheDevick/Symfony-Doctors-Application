@@ -30,7 +30,7 @@ class SpecialtyController extends BaseController
     protected function checkEntityOnRequest(bool $throwException = true): bool
     {
         $request = CustomRequest::createRequest();
-        
+
         $elementsTocreate = Specialty::elementsToCreate()['required'];
 
         foreach ($elementsTocreate as $elementToCreate) {
