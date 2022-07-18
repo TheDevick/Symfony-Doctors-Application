@@ -6,6 +6,7 @@ use App\Entity\Entity;
 use App\Exception\JsonNotFoundException;
 use App\Repository\Repository;
 use App\Request\Request as CustomRequest;
+use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -76,6 +77,24 @@ abstract class BaseController extends AbstractController
         return new JsonResponse($view);
     }
 
+    private function getCacheItem(Entity $entity): CacheItemInterface
+    {
+        $cachePrefix = $this->cachePrefix();
+        $entityId = $entity->getId();
+
+        $cacheItem = $this->cacheItemPoolInterface->getItem("$cachePrefix.$entityId");
+
+        return $cacheItem;
+    }
+
+    private function storeCache(Entity $entity): bool
+    {
+        $cacheItem = $this->getCacheItem($entity);
+        $cacheItem->set($entity);
+
+        return $this->cacheItemPoolInterface->save($cacheItem);
+    }
+
     public function store(Request $request): JsonResponse
     {
         $request = CustomRequest::createRequest();
@@ -83,6 +102,8 @@ abstract class BaseController extends AbstractController
         $this->checkEntityOnRequest($request);
 
         $entity = $this->createEntityObject($request);
+
+        $this->storeCache($entity);
 
         $this->repository->add($entity, true);
 
