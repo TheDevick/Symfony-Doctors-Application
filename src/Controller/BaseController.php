@@ -155,6 +155,10 @@ abstract class BaseController extends AbstractController
             throw new JsonNotFoundException();
         }
 
+        $cachePrefix = $this->cachePrefix();
+        $cacheTitle = "$cachePrefix.$id";
+        $this->cacheItemPoolInterface->deleteItem($cacheTitle);
+
         $this->repository->remove($entity, true);
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
