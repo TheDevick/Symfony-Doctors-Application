@@ -12,15 +12,17 @@ use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Psr\Log\LoggerInterface;
 
 class DoctorController extends BaseController
 {
     public function __construct(
         private SpecialtyRepository $specialtyRepository,
         private DoctorRepository $doctorRepository,
-        private CacheItemPoolInterface $cacheItemPool
+        private CacheItemPoolInterface $cacheItemPool,
+        private LoggerInterface $logger
     ) {
-        parent::__construct($doctorRepository, $cacheItemPool);
+        parent::__construct($doctorRepository, $cacheItemPool, $logger);
     }
 
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool

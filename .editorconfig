@@ -1,3 +1,4 @@
 [*.php]
 # Variable not Found
 php_diagnostic_php0412 = fatalerror 
+php_diagnostic_php0413 = fatalerror

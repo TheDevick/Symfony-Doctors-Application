@@ -12,12 +12,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Psr\Log\LoggerInterface;
 
 abstract class BaseController extends AbstractController
 {
     public function __construct(
         private Repository $repository,
-        private CacheItemPoolInterface $cacheItemPool
+        private CacheItemPoolInterface $cacheItemPool,
+        private LoggerInterface $logger
     ) {
     }
 

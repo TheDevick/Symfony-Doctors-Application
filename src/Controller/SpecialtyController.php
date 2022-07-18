@@ -14,15 +14,17 @@ use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
+use Psr\Log\LoggerInterface;
 
 class SpecialtyController extends BaseController
 {
     public function __construct(
         private DoctorRepository $doctorRepository,
         private SpecialtyRepository $specialtyRepository,
-        private CacheItemPoolInterface $cacheItemPool
+        private CacheItemPoolInterface $cacheItemPool,
+        private LoggerInterface $logger
     ) {
-        parent::__construct($specialtyRepository, $cacheItemPool);
+        parent::__construct($specialtyRepository, $cacheItemPool, $logger);
     }
 
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
