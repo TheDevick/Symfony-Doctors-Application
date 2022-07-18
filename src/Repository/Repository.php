@@ -9,6 +9,17 @@ use Doctrine\Persistence\ObjectRepository;
 
 abstract class Repository extends ServiceEntityRepository implements ObjectRepository
 {
+    public function findById(int $id, bool $throwException = true): Entity|null
+    {
+        $entity = $this->find($id);
+
+        if (is_null($entity) && $throwException) {
+            throw new JsonNotFoundException();
+        }
+
+        return $entity;
+    }
+
     public function add(Entity $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

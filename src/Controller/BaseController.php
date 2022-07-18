@@ -126,11 +126,7 @@ abstract class BaseController extends AbstractController
         if ($cacheExists) {
             $entity = $this->cacheItemPool->getItem($cacheTitle)->get();
         } else {
-            $entity = $this->repository->find($id);
-
-            if (is_null($entity)) {
-                throw new JsonNotFoundException();
-            }
+            $entity = $this->repository->findById($id);
         }
 
         return new JsonResponse($entity);
@@ -142,11 +138,7 @@ abstract class BaseController extends AbstractController
 
         $this->checkEntityOnRequest();
 
-        $entityFounded = $this->repository->find($id);
-
-        if (is_null($entityFounded)) {
-            throw new JsonNotFoundException();
-        }
+        $entityFounded = $this->repository->findById($id);
 
         $entityUpdated = $this->updateEntityObject($entityFounded, $request);
 
@@ -166,11 +158,7 @@ abstract class BaseController extends AbstractController
 
     public function destroy(int $id): JsonResponse
     {
-        $entity = $this->repository->find($id);
-
-        if (is_null($entity)) {
-            throw new JsonNotFoundException();
-        }
+        $entity = $this->repository->findById($id);
 
         $cachePrefix = $this->cachePrefix();
         $cacheTitle = "$cachePrefix.$id";
