@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use App\Exception\JsonNotFoundException;
 use App\Exception\JsonUnprocessableEntityException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
+    public function __construct(
+        private LoggerInterface $logger
+    ) {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -39,6 +45,20 @@ class ExceptionSubscriber implements EventSubscriberInterface
         return $response;
     }
 
+    private function onGenericException(string $stackTrace): JsonResponse
+    {
+        $this->logger->critical('An Exception Occurred. {stack}', [
+            'stack' => $stackTrace,
+        ]);
+
+        $message = ['Error' => 'Something went wrong! We\'re trying to fix it.'];
+        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+
+        $response = new JsonResponse($message, $statusCode);
+
+        return $response;
+    }
+
     public function onKernelException(ExceptionEvent $event): void
     {
         $throwable = $event->getThrowable();
@@ -52,5 +72,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $response = $this->onJsonUnprocessableEntityException();
             $event->setResponse($response);
         }
+
+        $stackTrace = $throwable->getTraceAsString();
+        $response = $this->onGenericException($stackTrace);
+        $event->setResponse($response);
     }
 }
