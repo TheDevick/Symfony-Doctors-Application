@@ -43,8 +43,10 @@ class DoctorController extends BaseController
         return true;
     }
 
-    private function getDoctorElements(CustomRequest $request): array
+    private function getDoctorElements(): array
     {
+        $request = CustomRequest::createRequest();
+
         $body = $request->getBody();
 
         $specialty = $this->specialtyRepository->find($body['Specialty']);
@@ -65,9 +67,7 @@ class DoctorController extends BaseController
 
     protected function createEntityObject(): Doctor
     {
-        $request = CustomRequest::createRequest();
-        
-        $elements = $this->getDoctorElements($request);
+        $elements = $this->getDoctorElements();
 
         /** @var Doctor $doctor */
         $doctor = DoctorFactory::createOne($elements)->object();

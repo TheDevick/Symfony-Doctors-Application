@@ -45,8 +45,10 @@ class SpecialtyController extends BaseController
         return true;
     }
 
-    private function getSpecialtyElements(CustomRequest $request): array
+    private function getSpecialtyElements(): array
     {
+        $request = CustomRequest::createRequest();
+
         $body = $request->getBody();
 
         $elements = [
@@ -59,9 +61,7 @@ class SpecialtyController extends BaseController
 
     protected function createEntityObject(): Specialty
     {
-        $request = CustomRequest::createRequest();
-        
-        $elements = $this->getSpecialtyElements($request);
+        $elements = $this->getSpecialtyElements();
 
         /** @var Specialty $specialty */
         $specialty = SpecialtyFactory::createOne($elements)->object();
