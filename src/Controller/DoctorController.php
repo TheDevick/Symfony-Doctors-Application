@@ -63,8 +63,10 @@ class DoctorController extends BaseController
         return $elements;
     }
 
-    protected function createEntityObject(CustomRequest $request): Doctor
+    protected function createEntityObject(): Doctor
     {
+        $request = CustomRequest::createRequest();
+        
         $elements = $this->getDoctorElements($request);
 
         /** @var Doctor $doctor */

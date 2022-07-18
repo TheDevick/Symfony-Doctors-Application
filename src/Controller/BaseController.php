@@ -23,7 +23,7 @@ abstract class BaseController extends AbstractController
     ) {
     }
 
-    abstract protected function createEntityObject(CustomRequest $request): Entity;
+    abstract protected function createEntityObject(): Entity;
 
     abstract protected function updateEntityObject(Entity $entity, CustomRequest $request): Entity;
 
@@ -103,7 +103,7 @@ abstract class BaseController extends AbstractController
 
         $this->checkEntityOnRequest($request);
 
-        $entity = $this->createEntityObject($request);
+        $entity = $this->createEntityObject();
 
         $this->storeCache($entity);
 

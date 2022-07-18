@@ -57,8 +57,10 @@ class SpecialtyController extends BaseController
         return $elements;
     }
 
-    protected function createEntityObject(CustomRequest $request): Specialty
+    protected function createEntityObject(): Specialty
     {
+        $request = CustomRequest::createRequest();
+        
         $elements = $this->getSpecialtyElements($request);
 
         /** @var Specialty $specialty */
