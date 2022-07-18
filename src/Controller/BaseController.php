@@ -140,7 +140,7 @@ abstract class BaseController extends AbstractController
     {
         $request = CustomRequest::createRequest();
 
-        $this->checkEntityOnRequest($request);
+        $this->checkEntityOnRequest();
 
         $entityFounded = $this->repository->find($id);
 
