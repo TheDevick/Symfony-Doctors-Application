@@ -51,18 +51,18 @@ abstract class BaseController extends AbstractController
 
     private function viewIndex()
     {
-        $request = CustomRequest::createRequest();
-        $extractor = $request->extractor;
-
-        $limit = $extractor->extractLimit();
-        $page = $extractor->extractPage();
-
         $entities = $this->getAllEntities();
 
         if (empty($entities)) {
             throw new JsonNotFoundException();
         }
 
+        $request = CustomRequest::createRequest();
+        $extractor = $request->extractor;
+
+        $limit = $extractor->extractLimit();
+        $page = $extractor->extractPage();
+        
         $view = [
             'current_page' => $page,
             'per_page' => $limit,
