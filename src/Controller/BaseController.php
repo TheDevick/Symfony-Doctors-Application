@@ -112,10 +112,19 @@ abstract class BaseController extends AbstractController
 
     public function show(int $id): JsonResponse
     {
-        $entity = $this->repository->find($id);
+        $cachePrefix = $this->cachePrefix();
+        $cacheTitle = "$cachePrefix.$id";
+        $cacheExists = $this->cacheItemPoolInterface->hasItem($cacheTitle);
 
-        if (is_null($entity)) {
-            throw new JsonNotFoundException();
+        if ($cacheExists) {
+            $entity = $this->cacheItemPoolInterface->getItem($cacheTitle)->get();
+        }
+        else {
+            $entity = $this->repository->find($id);
+
+            if (is_null($entity)) {
+                throw new JsonNotFoundException();
+            }
         }
 
         return new JsonResponse($entity);
