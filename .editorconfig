@@ -7,3 +7,9 @@ php_diagnostic_php0413 = fatalerror
 
 # Method not Found
 php_diagnostic_php0418 = fatalerror
+
+# Implements an Abstract Class
+php_diagnostic_php0432 = fatalerror
+
+# Function not Found
+php_diagnostic_php0417 = fatalerror
