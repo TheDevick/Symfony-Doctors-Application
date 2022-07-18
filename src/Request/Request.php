@@ -24,7 +24,7 @@ class Request extends HttpFoundationRequest
      * Return the Request Body.
      * Return False if Body Content is Null.
      */
-    public function getBody(): array|false
+    public function getBody(): array|bool
     {
         $bodyContent = $this->getContent();
 
@@ -41,7 +41,7 @@ class Request extends HttpFoundationRequest
      * Return an Array with the Request Body Parameters
      * Return False if Body Content is Null.
      */
-    public function getBodyParameters(): array|false
+    public function getBodyParameters(): array|bool
     {
         $body = $this->getBody();
 
@@ -58,7 +58,7 @@ class Request extends HttpFoundationRequest
      * Return an Array with the Request Body Keys
      * Return False if Body Content is Null.
      */
-    public function getBodyKeys(): array|false
+    public function getBodyKeys(): array|bool
     {
         $body = $this->getBody();
 
