@@ -18,9 +18,9 @@ class DoctorController extends BaseController
     public function __construct(
         private SpecialtyRepository $specialtyRepository,
         private DoctorRepository $doctorRepository,
-        private CacheItemPoolInterface $cacheItemPoolInterface
+        private CacheItemPoolInterface $cacheItemPool
     ) {
-        parent::__construct($doctorRepository, $cacheItemPoolInterface);
+        parent::__construct($doctorRepository, $cacheItemPool);
     }
 
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool

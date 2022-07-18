@@ -17,7 +17,7 @@ abstract class BaseController extends AbstractController
 {
     public function __construct(
         private Repository $repository,
-        private CacheItemPoolInterface $cacheItemPoolInterface
+        private CacheItemPoolInterface $cacheItemPool
     ) {
     }
 
@@ -82,7 +82,7 @@ abstract class BaseController extends AbstractController
         $cachePrefix = $this->cachePrefix();
         $entityId = $entity->getId();
 
-        $cacheItem = $this->cacheItemPoolInterface->getItem("$cachePrefix.$entityId");
+        $cacheItem = $this->cacheItemPool->getItem("$cachePrefix.$entityId");
 
         return $cacheItem;
     }
@@ -92,7 +92,7 @@ abstract class BaseController extends AbstractController
         $cacheItem = $this->getCacheItem($entity);
         $cacheItem->set($entity);
 
-        return $this->cacheItemPoolInterface->save($cacheItem);
+        return $this->cacheItemPool->save($cacheItem);
     }
 
     public function store(Request $request): JsonResponse
@@ -114,10 +114,10 @@ abstract class BaseController extends AbstractController
     {
         $cachePrefix = $this->cachePrefix();
         $cacheTitle = "$cachePrefix.$id";
-        $cacheExists = $this->cacheItemPoolInterface->hasItem($cacheTitle);
+        $cacheExists = $this->cacheItemPool->hasItem($cacheTitle);
 
         if ($cacheExists) {
-            $entity = $this->cacheItemPoolInterface->getItem($cacheTitle)->get();
+            $entity = $this->cacheItemPool->getItem($cacheTitle)->get();
         } else {
             $entity = $this->repository->find($id);
 
@@ -145,9 +145,9 @@ abstract class BaseController extends AbstractController
 
         $cachePrefix = $this->cachePrefix();
         $cacheTitle = "$cachePrefix.$id";
-        $item = $this->cacheItemPoolInterface->getItem($cacheTitle);
+        $item = $this->cacheItemPool->getItem($cacheTitle);
         $item->set($entityUpdated);
-        $this->cacheItemPoolInterface->save($item);
+        $this->cacheItemPool->save($item);
 
         return new JsonResponse($entityUpdated);
     }
@@ -162,7 +162,7 @@ abstract class BaseController extends AbstractController
 
         $cachePrefix = $this->cachePrefix();
         $cacheTitle = "$cachePrefix.$id";
-        $this->cacheItemPoolInterface->deleteItem($cacheTitle);
+        $this->cacheItemPool->deleteItem($cacheTitle);
 
         $this->repository->remove($entity, true);
 

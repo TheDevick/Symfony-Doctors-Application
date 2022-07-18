@@ -20,9 +20,9 @@ class SpecialtyController extends BaseController
     public function __construct(
         private DoctorRepository $doctorRepository,
         private SpecialtyRepository $specialtyRepository,
-        private CacheItemPoolInterface $cacheItemPoolInterface
+        private CacheItemPoolInterface $cacheItemPool
     ) {
-        parent::__construct($specialtyRepository, $cacheItemPoolInterface);
+        parent::__construct($specialtyRepository, $cacheItemPool);
     }
 
     protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
