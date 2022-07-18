@@ -11,8 +11,8 @@ use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class DoctorController extends BaseController
 {

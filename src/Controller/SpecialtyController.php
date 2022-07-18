@@ -11,10 +11,10 @@ use App\Repository\DoctorRepository;
 use App\Repository\SpecialtyRepository;
 use App\Request\Request as CustomRequest;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
-use Psr\Log\LoggerInterface;
 
 class SpecialtyController extends BaseController
 {
