@@ -109,6 +109,11 @@ abstract class BaseController extends AbstractController
 
         $this->repository->add($entity, true);
 
+        $this->logger->notice('New {entity} was stored with id {id}', [
+            'entity' => get_class($entity),
+            'id' => $entity->getId(),
+        ]);
+
         return new JsonResponse($entity, Response::HTTP_CREATED);
     }
 
@@ -151,6 +156,11 @@ abstract class BaseController extends AbstractController
         $item->set($entityUpdated);
         $this->cacheItemPool->save($item);
 
+        $this->logger->notice('Existing {entity} was updated with id {id}', [
+            'entity' => get_class($entityUpdated),
+            'id' => $entityUpdated->getId(),
+        ]);
+
         return new JsonResponse($entityUpdated);
     }
 
@@ -167,6 +177,11 @@ abstract class BaseController extends AbstractController
         $this->cacheItemPool->deleteItem($cacheTitle);
 
         $this->repository->remove($entity, true);
+
+        $this->logger->notice('Existing {entity} was destroyed with id {id}', [
+            'entity' => get_class($entity),
+            'id' => $entity->getId(),
+        ]);
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
