@@ -27,7 +27,7 @@ abstract class BaseController extends AbstractController
 
     abstract protected function updateEntityObject(Entity $entity, CustomRequest $request): Entity;
 
-    abstract protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool;
+    abstract protected function checkEntityOnRequest(bool $throwException = true): bool;
 
     abstract protected function cachePrefix(): string;
 
@@ -101,7 +101,7 @@ abstract class BaseController extends AbstractController
     {
         $request = CustomRequest::createRequest();
 
-        $this->checkEntityOnRequest($request);
+        $this->checkEntityOnRequest();
 
         $entity = $this->createEntityObject();
 

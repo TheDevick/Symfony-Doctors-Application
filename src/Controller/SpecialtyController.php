@@ -27,8 +27,10 @@ class SpecialtyController extends BaseController
         parent::__construct($specialtyRepository, $cacheItemPool, $logger);
     }
 
-    protected function checkEntityOnRequest(CustomRequest $request, bool $throwException = true): bool
+    protected function checkEntityOnRequest(bool $throwException = true): bool
     {
+        $request = CustomRequest::createRequest();
+        
         $elementsTocreate = Specialty::elementsToCreate()['required'];
 
         foreach ($elementsTocreate as $elementToCreate) {
