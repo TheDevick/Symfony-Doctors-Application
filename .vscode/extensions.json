@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "devsense.phptools-vscode",
+        "zobo.php-intellisense",
+        "ms-vscode-remote.remote-containers"
+    ]
+}
